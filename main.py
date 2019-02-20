@@ -15,9 +15,13 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/main')
 def showMain():
-	#quer = session.query(Applicant).one()
-	#return render_template('main.html')
-	return app.send_static_file('main.html')
+	quer = session.query(Applicant).one()
+	sal = str(quer.id) +" - " + quer.name +" - " + quer.mail + "\n"
+	quer = session.query(Company).one()
+	sal1 = str(quer.id) +" - " + quer.name +" - " + quer.description + "\n"
+	quer = session.query(Job).one()
+	sal2 = str(quer.id) +" - " + quer.title +" - " + quer.description +" - " + quer.company.name
+	return render_template("main.html")
 
 @app.route('/applicant/new')
 def newApplicant():
@@ -28,11 +32,17 @@ def newApplicant():
 
 @app.route('/company/new')
 def newCompany():
-    return "This should show option to create a new company"
+	comp = Company(name = "Mongoles SA de CV", mail = "claudiam@mongoles.com", password = "mongolessa", description = "Somos una compañía de comercio internacional especializada en el mercado astiático")
+	session.add(comp)
+	session.commit()
+	return "This should show option to create a new company"
 
 @app.route('/job/<int:company_id>/new')
 def newJob(company_id):
-    return "This should show option to create a new job"
+	trab = Job(title = "CEO", salary = 1000000, description = "In this role you will lead the team" , company_id = company_id)
+	session.add(trab)
+	session.commit()
+	return "This should show option to create a new job"
 
 @app.route('/company/<int:company_id>/feed')
 def showCompany(company_id):
