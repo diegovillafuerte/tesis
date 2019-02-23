@@ -11,24 +11,46 @@
     <title>Bienvenido a Simil</title>
   </head>
   <body>
-        <div class="container">
-          <h1>Bienvenido a Simil</h1>
-          <form>
-            <div class="form-group">
-              <label for="exampleInputEmail1">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-            </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-            </div>
-            <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1">
-              <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
+    <div class="container">
+      <h1>Bienvenido a Simil</h1>
+              <!--MESSAGE FLASHING EXAMPLE -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+
+        <ul>
+        {% for message in messages %}
+          <li><strong>{{message}}</strong></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+      <form action="{{ url_for('showMain')}}" method = 'POST'>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Correo electrónico</label>
+          <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+          <small id="emailHelp" class="form-text text-muted">Nunca compartiremos tu correo electrónico con nadie.</small>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <input name="password"type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        </div>
+        <div class="form-check-inline">
+          <input class="form-check-input" type="radio" name="radiosTipodecliente" id="exampleRadios1" value="applicant">
+          <label class="form-check-label" for="exampleRadios1">
+            Soy un aplicante
+          </label>
+        </div>
+        <div class="form-check-inline">
+          <input class="form-check-input" type="radio" name="radiosTipodecliente" id="exampleRadios2" value="company">
+          <label class="form-check-label" for="exampleRadios2">
+            Soy una compañía
+          </label>
+        </div>
+        <br><br>
+        <button name="login" value="login" type="submit" class="btn btn-primary">Ingresar a tu cuenta</button>
+        <br><br>
+        <button name="signup" value="signup" type="submit" class="btn btn-primary">Crear una cuenta</button>
+      </form>
     </div>
 
     <!-- Optional JavaScript -->

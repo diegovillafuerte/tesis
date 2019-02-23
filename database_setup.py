@@ -1,5 +1,5 @@
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String, Float, create_engine
+from sqlalchemy import Column, ForeignKey, Integer, String, Float, create_engine, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import sessionmaker
@@ -18,7 +18,7 @@ class Company(Base):
 
 	id = Column(Integer, primary_key = True)
 	name = Column(String(150), nullable = False)
-	mail = Column(String(150), nullable = False)
+	mail = Column(String(150), nullable = False, unique=True)
 	password = Column(String(150), nullable = False)
 	description = Column(String(400), nullable = False)
 
@@ -37,18 +37,16 @@ class Applicant(Base):
 
 	id = Column(Integer, primary_key = True)
 	name = Column(String(150), nullable = False)
-	mail = Column(String(150), nullable = False)
+	mail = Column(String(150), nullable = False, unique=True)
 	password = Column(String(150), nullable = False)
 
 	@property
 	def serialize(self):
 		#returns object data in easily serializable format
 		return{
-		'name':self.name,
-		'description':self.description,
 		'id':self.id,
-		'price':self.price,
-		'course':self.course,
+		'name':self.name,
+		'mail':self.mail,
 		}
 
 class Job(Base):
@@ -59,6 +57,8 @@ class Job(Base):
 	title = Column(String(150), nullable = False)
 	salary = Column(Float, nullable = False)
 	description = Column(String(400), nullable = False)
+	openings = Column(Integer)
+	status = Column(Boolean, default=True)
 
 	company_id = Column(Integer, ForeignKey('company.id'))
 	company = relationship(Company)
@@ -69,7 +69,9 @@ class Job(Base):
 			'id': self.id,
 			'title': self.title,
 			'salary': self.salary,
-			'description': self.description}
+			'description': self.description,
+			'openings': self.openings,
+			'status': self.status}
 
 Session = sessionmaker(db)
 session = Session()

@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from database_setup import Base, Company, Applicant, Job
 from sqlalchemy.orm import sessionmaker
+import dbOperations, magic
 
 engine = create_engine('postgres://localhost/simil')
 Base.metadata.bind = engine
@@ -12,49 +13,81 @@ session = DBSession()
 
 app = Flask(__name__)
 
-@app.route('/')
-@app.route('/main')
+
+@app.route('/', methods=['GET', 'POST'])
 def showMain():
-	quer = session.query(Applicant).one()
-	sal = str(quer.id) +" - " + quer.name +" - " + quer.mail + "\n"
-	quer = session.query(Company).one()
-	sal1 = str(quer.id) +" - " + quer.name +" - " + quer.description + "\n"
-	quer = session.query(Job).one()
-	sal2 = str(quer.id) +" - " + quer.title +" - " + quer.description +" - " + quer.company.name
-	return render_template("main.html")
+    if request.method  == 'POST':
+        mail = request.form['email']
+        password = request.form['password']
+        client_type = request.form['radiosTipodecliente']
+        action = ""
+        try:
+            action = request.form['login']
+        except:
+            pass
+        try:
+            action = request.form['signup']
+        except:
+            pass
+        if action == 'login':
+            if client_type == "applicant":
+                if dbOperations.validateApplicant(mail, password):
+                    return redirect(url_for('showApplicant', applicant_id=dbOperations.getApplicantID(mail)))
+                else:
+                    flash("El correo o contraseña son incorrectos. Por favor intenta de nuevo")
+            else:
+                if dbOperations.validateCompany(mail, password):
+                    return redirect(url_for('showCompany', company_id=dbOperations.getCompanyID(mail)))
+                else:
+                    flash("El correo o contraseña son incorrectos. Por favor intenta de nuevo")
+        else:
+            if client_type == "applicant":
+                if dbOperations.validateApplicant(mail, password):
+                    flash("Ya existe un aplicante registrado con ese correo y esa contraseña")
+                else:
+                    return redirect(url_for('newApplicant', app_mail=mail, app_password=password))
+            else:
+                if dbOperations.validateCompany(mail, password):
+                    flash("Ya existe una compañía registrado con esos correo y contraseña")
+                else:
+                    return redirect(url_for('newCompany', mail = mail, password = password))
+    return render_template("main.html")
 
 @app.route('/applicant/new')
-def newApplicant():
-	appli = Applicant(name = 'Diego', mail = 'diegovillafuertesoraiz@gmail.com', password='Holisima')
-	session.add(appli)
-	session.commit()
-	return "This should show option to create a new applicant"
+@app.route('/applicant/new/<string:app_mail>/<string:app_password>')
+def newApplicant(app_mail="", app_password=""):
+        return "This should show option to create a new applicant" + app_mail
 
 @app.route('/company/new')
-def newCompany():
-	comp = Company(name = "Mongoles SA de CV", mail = "claudiam@mongoles.com", password = "mongolessa", description = "Somos una compañía de comercio internacional especializada en el mercado astiático")
-	session.add(comp)
-	session.commit()
-	return "This should show option to create a new company"
+@app.route('/company/new/<string:mail>/<string:password>')
+def newCompany(mail="", password=""):
+        return "This should show option to create a new company" + mail
 
 @app.route('/job/<int:company_id>/new')
 def newJob(company_id):
-	trab = Job(title = "CEO", salary = 1000000, description = "In this role you will lead the team" , company_id = company_id)
-	session.add(trab)
-	session.commit()
-	return "This should show option to create a new job"
+        return "This should show option to create a new job"
 
 @app.route('/company/<int:company_id>/feed')
 def showCompany(company_id):
-    return "This should show the feed for a company"
+    jobs = session.query(Job).filter(Job.company_id == company_id).all()
+    company = session.query(Company).filter(Company.id == company_id).one()
+    return render_template("showCompany.html", jobs = jobs, company = company)
 
 @app.route('/applicant/<int:applicant_id>/feed')
 def showApplicant(applicant_id):
-    return "This should show the feed for an applicant"
+    return "This should show the feed for applicant" + str(applicant_id)    
 
 @app.route('/job/<int:job_id>/feed')
 def showJob(job_id):
-    return "This should show the feed for a job posting"
+    try:
+        matches = magic.getlistOfMatches(job_id)
+        job = session.query(Job).filter(Job.job_id == job_id).one()
+        company = session.query(Company).filter(Company.id == job.company_id).one()
+        return redirect(url_for("showjob.html", applicants = matches, job = job, company = company))
+    except Exception as e:
+        print(e)
+        return render_template("main.html")
+    
 
 @app.route('/applicant/<int:applicant_id>/edit')
 def editApplicant(applicant_id):
@@ -82,6 +115,6 @@ def deleteJob(job_id):
 
 
 if __name__ == '__main__':
-	app.secret_key = 'Super secret key'
-	app.debug = True
-	app.run(host='0.0.0.0', port=5000)
+        app.secret_key = 'Super secret key'
+        app.debug = True
+        app.run(host='0.0.0.0', port=5000)
