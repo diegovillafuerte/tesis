@@ -1,8 +1,7 @@
 import sys
 from sqlalchemy import Column, ForeignKey, Integer, String, Float, create_engine, Boolean
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import relationship, sessionmaker
 import psycopg2
 
 db_string = 'postgres://localhost/simil'
@@ -72,6 +71,24 @@ class Job(Base):
 			'description': self.description,
 			'openings': self.openings,
 			'status': self.status}
+
+class MatchScore(Base):
+
+	__tablename__ = 'matchscore'
+
+	scores = Column(Integer, nullable = False)
+	job_id = Column(Integer, ForeignKey('job.id'), primary_key = True)
+	job = relationship(Job)
+	applicant_id = Column(Integer, ForeignKey('applicant.id'), primary_key = True)
+	applicant = relationship(Applicant)
+
+	@property
+	def serialize(self):
+		return {
+			'score': self.scores,
+			'job_id': self.job_id,
+			'applicant_id': self.applicant_id}
+
 
 Session = sessionmaker(db)
 session = Session()

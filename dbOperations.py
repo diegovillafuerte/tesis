@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine, func
-from database_setup import Base, Company, Applicant, Job
+from database_setup import Base, Company, Applicant, Job, MatchScore
 from sqlalchemy.orm import sessionmaker
 import random
+import magic
 
 engine = create_engine('postgres://localhost/simil')
 Base.metadata.bind = engine
@@ -65,20 +66,68 @@ def getCompanyID(mail):
 		return 0
 
 
-def createUser(name, mail, password):
-	appli = Applicant(name = name, mail = mail, password=password)
-	session.add(appli)
-	session.commit()
+def createApplicant(name, mail, password):
+	''' Given a name, an email address and a password, it creates an applicant in the database
+		For every applicant it creates it calculates its match score with every job available'''
+	try:
+		appli = Applicant(name = name, mail = mail, password=password)
+		session.add(appli)
+		session.commit()
+		all_jobs = session.query(Job).all()
+		applicant_id = session.query(Applicant).filter(Applicant.mail == mail).one().id
+		for job in all_jobs:
+			iden = job.id
+			createMatchScore(magic.matchScore(iden, applicant_id), iden, applicant_id)
+
+	except Exception as e:
+		print(e)
+		return render_template("main.html")
+		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo.\
+			Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
 
 def createCompany(name, mail, password, description):
-	comp = Company(name = name, mail = mail, password = password, description = description)
-	session.add(comp)
-	session.commit()
+	''' Given a name, mail, password and description, it creates a company in the database '''
+	try:
+		comp = Company(name = name, mail = mail, password = password, description = description)
+		session.add(comp)
+		session.commit()
+	except Exception as e:
+		print(e)
+		return render_template("main.html")
+		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo.\
+			Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
+
 
 def createJob(title, salary, description, company_id, openings, status):
-	trab = Job(title = title, salary = salary, description = description , company_id = company_id, openings=openings)
-	session.add(trab)
-	session.commit()
+	''' Function for creating a job. Everytime you create one, it creates a match score with every 
+		applicant available and adds it to the db'''
+	try:
+		trab = Job(title = title, salary = salary, description = description , company_id = company_id, openings=openings)
+		session.add(trab)
+		session.commit()
+		all_applicants = session.query(Applicant).all()
+		job = session.query(Job).filter(Job.title == title, Job.company_id == company_id).one()
+		job_id = job.id
+		for applicant in all_applicants:
+			applicant_id = applicant.id
+			createMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
+	except Exception as e:
+		print(e)
+		return render_template("main.html")
+		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo.\
+			Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
+
+def createMatchScore(score, job_id, applicant_id):
+	try:
+		match = MatchScore(scores=score, job_id=job_id, applicant_id=applicant_id)
+		session.add(match)
+		session.commit()
+	except Exception as e:
+		print(e)
+		return render_template("main.html")
+		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo.\
+			Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
+
 
 def printDB():
 	print("==============Applicants================")
@@ -96,14 +145,11 @@ def printDB():
 	for job in jobs:
 		sal = str(job.id) +" - " + job.title +" - " + str(job.salary) +" - " + str(job.company_id)+" - " + str(job.openings) +" - " + str(job.status)+"\n"
 		print(sal)
-
-def testIfExists():
-	quer = session.query(Applicant).filter(Applicant.mail == "diegovillafuertesoraiz@gmail.com").scalar()
-	if quer:
-		sal = str(quer.id) +" - " + quer.name +" - " + quer.mail + "\n"
-	else:
-		sal = "hola"
-	return sal
+	print("\n==============Matches===============")
+	matchscores = session.query(MatchScore).all()
+	for match in matchscores:
+		sal = "job: " + str(match.job_id) +" - " + "applicant: " + str(match.applicant_id)  +" - " + "Score: " + str(match.scores) + "\n"
+		print(sal)
 
 #Create a few users 
 '''
@@ -111,14 +157,14 @@ user_names = ["Ana", "jose", "Pedro", "Joel", "Mariana", "Sofía"]
 for user in user_names:
 	mail = user + "@gmail.com"
 	password = user + str(len(user))
-	createUser(user, mail, password)
+	createApplicant(user, mail, password)
 
 
 company_names = ["Transbarcos", "SuperLibros", "TodoMart", "DeportesExtreme", "BancoDeLaMeseta"]
 for company in company_names:
 	mail = "contacto@" + company + ".com"
 	password = company + str(len(company))
-	description = "Está es una descripción genérica porque esto es un ejemplo"
+	description = "Esta es una descripción genérica porque esto es un ejemplo"
 	createCompany(company, mail, password, description)
 
 job_titles = ["Cajero", "Asistente", "Vendedor", "servic", "Mesero"]
@@ -129,7 +175,9 @@ for title in job_titles:
 	openings = len(title)*4
 	createJob(title, salary, description, company_id, openings, True)
 
-prints:
+
+
+#prints:
 ==============Applicants================
 1 - Ana - Ana@gmail.com - Ana3
 
@@ -157,16 +205,15 @@ prints:
 
 
 ==============Jobs===============
-1 - Cajero - 8538.0 - 1 - 24
+1 - Cajero - 8538.0 - 4 - 24 - True
 
-2 - Asistente - 12807.0 - 1 - 36
+2 - Asistente - 12807.0 - 1 - 36 - True
 
-3 - Vendedor - 11384.0 - 1 - 32
+3 - Vendedor - 11384.0 - 1 - 32 - True
 
-4 - servic - 8538.0 - 4 - 24
+4 - servic - 8538.0 - 3 - 24 - True
 
-5 - Mesero - 8538.0 - 1 - 24	
+5 - Mesero - 8538.0 - 2 - 24 - True
 '''
 
-#printDB()
-
+printDB()

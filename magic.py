@@ -23,5 +23,5 @@ def getlistOfMatches(job_id):
 	return matches
 
 def matchScore(job_id, applicant_id):
-	score = random()*100
+	score = random.random()*100
 	return score
