@@ -4,14 +4,13 @@ from sqlalchemy import create_engine, func
 from database_setup import Base, Company, Applicant, Job, MatchScore
 from sqlalchemy.orm import sessionmaker
 import random
-import magic
+
 
 engine = create_engine('postgres://localhost/simil')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
-
 
 def validateApplicant(mail, password):
 	''' Validates whether or not the applicant exists in the 
@@ -40,7 +39,6 @@ def validateCompany(mail, password):
 	except Exception as e:
 		print(e)
 		return False
-
 
 def getApplicantID(mail):
 	''' Receives an email and returns an id. If the user does not exist, it returns 0 '''
@@ -205,15 +203,77 @@ for title in job_titles:
 
 
 ==============Jobs===============
-1 - Cajero - 8538.0 - 4 - 24 - True
+4 - Cajero - 8538.0 - 1 - 24 - True
 
-2 - Asistente - 12807.0 - 1 - 36 - True
+5 - Asistente - 12807.0 - 5 - 36 - True
 
-3 - Vendedor - 11384.0 - 1 - 32 - True
+6 - Vendedor - 11384.0 - 1 - 32 - True
 
-4 - servic - 8538.0 - 3 - 24 - True
+7 - servic - 8538.0 - 1 - 24 - True
 
-5 - Mesero - 8538.0 - 2 - 24 - True
+8 - Mesero - 8538.0 - 4 - 24 - True
+
+
+==============Matches===============
+job: 4 - applicant: 1 - Score: 73
+
+job: 4 - applicant: 2 - Score: 24
+
+job: 4 - applicant: 3 - Score: 62
+
+job: 4 - applicant: 4 - Score: 24
+
+job: 4 - applicant: 5 - Score: 92
+
+job: 4 - applicant: 6 - Score: 21
+
+job: 5 - applicant: 1 - Score: 98
+
+job: 5 - applicant: 2 - Score: 66
+
+job: 5 - applicant: 3 - Score: 83
+
+job: 5 - applicant: 4 - Score: 91
+
+job: 5 - applicant: 5 - Score: 38
+
+job: 5 - applicant: 6 - Score: 39
+
+job: 6 - applicant: 1 - Score: 70
+
+job: 6 - applicant: 2 - Score: 24
+
+job: 6 - applicant: 3 - Score: 98
+
+job: 6 - applicant: 4 - Score: 24
+
+job: 6 - applicant: 5 - Score: 17
+
+job: 6 - applicant: 6 - Score: 93
+
+job: 7 - applicant: 1 - Score: 44
+
+job: 7 - applicant: 2 - Score: 9
+
+job: 7 - applicant: 3 - Score: 45
+
+job: 7 - applicant: 4 - Score: 60
+
+job: 7 - applicant: 5 - Score: 42
+
+job: 7 - applicant: 6 - Score: 81
+
+job: 8 - applicant: 1 - Score: 8
+
+job: 8 - applicant: 2 - Score: 75
+
+job: 8 - applicant: 3 - Score: 68
+
+job: 8 - applicant: 4 - Score: 90
+
+job: 8 - applicant: 5 - Score: 92
+
+job: 8 - applicant: 6 - Score: 48
 '''
 
-printDB()
+#printDB()

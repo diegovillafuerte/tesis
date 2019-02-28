@@ -14,20 +14,20 @@
     <div class="container">
       <h1>Estos son los aplicantes disponibles para el puesto {{job.title}} de la empresa {{company.title}}</h1>
 
-      {% for key, value in matches.items() %}
+      {% for match in matches %}
         <div class="card">
           <div class="card-header">
             <div class="row">
-              <div class="col-9">{{key}}</div>
+              <div class="col-9">{{match[0]}}</div>
               <div class="col-3">
               </div>
             </div>
             
           </div>
           <div class="card-body">
-            <h5 class="card-title">La puntuación de match es: {{value[0]}}</h5>
+            <h5 class="card-title">La puntuación de match es: {{match[1]}}</h5>
             <p class="card-text">Aquí podría ir una descripción</p>
-            <a href="{{url_for('showInterest', job_id=value[1])}}" class="btn btn-primary">Mostrar interes en el aplicante</a>
+            <a href="{{url_for('showInterestCompany', job_id=job.id, applicant_id=match[2])}}" class="btn btn-primary">Mostrar interes en el aplicante</a>
           </div>
         </div>
         <br>

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
-from database_setup import Base, Company, Applicant, Job
+from database_setup import Base, Company, Applicant, Job, MatchScore
 from sqlalchemy.orm import sessionmaker
 import dbOperations, magic
 
@@ -69,23 +69,38 @@ def newJob(company_id):
 
 @app.route('/company/<int:company_id>/feed')
 def showCompany(company_id):
-    jobs = session.query(Job).filter(Job.company_id == company_id).all()
-    company = session.query(Company).filter(Company.id == company_id).one()
-    return render_template("showCompany.html", jobs = jobs, company = company)
+    try:
+        jobs = session.query(Job).filter(Job.company_id == company_id).all()
+        company = session.query(Company).filter(Company.id == company_id).one()
+        return render_template("showCompany.html", jobs = jobs, company = company)
+    except Exception as e:
+        print(e)
+        return render_template("main.html")
 
 @app.route('/applicant/<int:applicant_id>/feed')
 def showApplicant(applicant_id):
-    return "This should show the feed for applicant" + str(applicant_id)    
+    try:
+        matches = magic.getListOfMatchesForJob(job_id)
+        print(type(matches))
+        job = session.query(Job).filter(Job.id == job_id).one()
+        company = session.query(Company).filter(Company.id == job.company_id).one()
+        return render_template("showJob.html", matches = matches, job = job, company = company)
+    except Exception as e:
+        print(e)
+        flash("Ocurrió un error, por favor intentalo de nuevo")
+        return render_template("main.html")   
 
 @app.route('/job/<int:job_id>/feed')
 def showJob(job_id):
     try:
-        matches = magic.getlistOfMatches(job_id)
-        job = session.query(Job).filter(Job.job_id == job_id).one()
+        matches = magic.getListOfMatchesForJob(job_id)
+        print(type(matches))
+        job = session.query(Job).filter(Job.id == job_id).one()
         company = session.query(Company).filter(Company.id == job.company_id).one()
-        return redirect(url_for("showjob.html", applicants = matches, job = job, company = company))
+        return render_template("showJob.html", matches = matches, job = job, company = company)
     except Exception as e:
         print(e)
+        flash("Ocurrió un error, por favor intentalo de nuevo")
         return render_template("main.html")
     
 
@@ -112,6 +127,10 @@ def editJob(job_id):
 @app.route('/job/<int:job_id>/delete')
 def deleteJob(job_id):
     return "This should show the option to delete a job's information"
+
+@app.route('/job/<int:job_id>/<int:applicant_id>/interest')
+def showInterestCompany(job_id, applicant_id):
+    return"This should be the confirmation of a job interest by a company for job "+str(job_id)+ " in applicant " +str(applicant_id)
 
 
 if __name__ == '__main__':
