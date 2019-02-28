@@ -81,6 +81,8 @@ class MatchScore(Base):
 	job = relationship(Job)
 	applicant_id = Column(Integer, ForeignKey('applicant.id'), primary_key = True)
 	applicant = relationship(Applicant)
+	interest_applicant = Column(Boolean, default = False)
+	interest_job = Column(Boolean, default = False)
 
 	@property
 	def serialize(self):

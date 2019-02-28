@@ -4,6 +4,10 @@ from sqlalchemy import create_engine, func
 from database_setup import Base, Company, Applicant, Job, MatchScore
 from sqlalchemy.orm import sessionmaker
 import random
+import locale
+
+#Importar formateo de dinero
+locale.setlocale( locale.LC_ALL, 'en_CA.UTF-8' )
 
 engine = create_engine('postgres://localhost/simil')
 Base.metadata.bind = engine
@@ -21,19 +25,22 @@ def getListOfMatchesForJob(job_id):
 		return matches
 	except Exception as e:
 		print(e)
+		print("El error es en la función getListOfMatchesForJob de magic.py")
 		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo. Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
 		return render_template("main.html")
 
 def getListOfMatchesForApplicant(applicant_id):
 	try:
-		jobs = session.query(Job).filter(status==True)
+		jobs = session.query(Job).filter(Job.status==True)
 		matches = []
 		for i in jobs:
-			matches.append([i.id, i.title, i.salary, i.descrition, getMatchScore(i.id, applicant_id)])
+			company_name = session.query(Company).filter(Company.id == i.company_id).one().name
+			matches.append([i.id, i.title, locale.currency(i.salary, grouping=True), i.description, getMatchScore(i.id, applicant_id) , company_name])
 		matches.sort(key=lambda x: x[4], reverse=True)
 		return matches
 	except Exception as e:
 		print(e)
+		print("El error es en la función getListOfMatchesForApplicant de magic.py")
 		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo. Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
 		return render_template("main.html")
 

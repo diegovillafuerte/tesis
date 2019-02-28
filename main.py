@@ -80,11 +80,9 @@ def showCompany(company_id):
 @app.route('/applicant/<int:applicant_id>/feed')
 def showApplicant(applicant_id):
     try:
-        matches = magic.getListOfMatchesForJob(job_id)
-        print(type(matches))
-        job = session.query(Job).filter(Job.id == job_id).one()
-        company = session.query(Company).filter(Company.id == job.company_id).one()
-        return render_template("showJob.html", matches = matches, job = job, company = company)
+        matches = magic.getListOfMatchesForApplicant(applicant_id)
+        applicant = session.query(Applicant).filter(Applicant.id == applicant_id).one()
+        return render_template("showApplicant.html", matches = matches, applicant = applicant)
     except Exception as e:
         print(e)
         flash("Ocurrió un error, por favor intentalo de nuevo")
@@ -94,7 +92,6 @@ def showApplicant(applicant_id):
 def showJob(job_id):
     try:
         matches = magic.getListOfMatchesForJob(job_id)
-        print(type(matches))
         job = session.query(Job).filter(Job.id == job_id).one()
         company = session.query(Company).filter(Company.id == job.company_id).one()
         return render_template("showJob.html", matches = matches, job = job, company = company)
@@ -131,6 +128,20 @@ def deleteJob(job_id):
 @app.route('/job/<int:job_id>/<int:applicant_id>/interest')
 def showInterestCompany(job_id, applicant_id):
     return"This should be the confirmation of a job interest by a company for job "+str(job_id)+ " in applicant " +str(applicant_id)
+
+@app.route('/applicant/<int:job_id>/<int:applicant_id>/interest')
+def showInterestApplicant(job_id, applicant_id):
+    try:
+        offer = session.query(MatchScore).filter(MatchScore.job_id == job_id, MatchScore.applicant_id == applicant_id).one()
+        offer.interest_applicant = True
+        #return"This should be the confirmation of a job interest by applicant "+str(applicant_id)+ " in job " +str(job_id)
+        return render_template('showInterestApplicant.html')
+    except Exception as e:
+        print(e)
+        print("El error ocurrión en la función showInteresApplicant de main.py")
+        flash("Ocurrió un error, por favor intentalo de nuevo")
+        return render_template("main.html")
+
 
 
 if __name__ == '__main__':
