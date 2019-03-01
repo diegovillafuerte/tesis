@@ -1,1 +1,34 @@
-ss
+{% extends 'layout.html' %}
+
+{% block content %}
+
+  <div class="container">
+    <form action="{{ url_for('showContact')}}" method = 'POST'>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Correo electrónico</label>
+          <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Correo electrónico...">
+          <small id="emailHelp" class="form-text text-muted">Nunca compartiremos tu correo electrónico con nadie.</small>
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlTextarea1">Escribe aquí tu mensaje</label>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Tu mensaje..."></textarea>
+        </div>
+        <div class="form-check-inline">
+          <input class="form-check-input" type="radio" name="radiosTipodecliente" id="exampleRadios1" value="applicant">
+          <label class="form-check-label" for="exampleRadios1">
+            Soy un aplicante
+          </label>
+        </div>
+        <div class="form-check-inline">
+          <input class="form-check-input" type="radio" name="radiosTipodecliente" id="exampleRadios2" value="company">
+          <label class="form-check-label" for="exampleRadios2">
+            Soy una compañía
+          </label>
+        </div>
+        <br><br>
+        <button name="login" value="login" type="submit" class="btn btn-primary">Envíar</button>
+        <br>
+    </form>
+  </div>
+
+{% endblock %}

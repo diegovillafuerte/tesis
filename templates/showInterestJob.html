@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <div class="container">
+    <div class="jumbotron">
+      <div class="col-sm-8 mx-auto">
+        <h1>Tenemos un match!</h1>
+        <p>Estamos seguros de que {{applicant.name}} va a ser un gran trabajo como {{job.title}}!</p>
+        <p>Enseguida recibiras por correo los datos de contacto {{applicant.name}}. Si tienes cualquier duda no dudes en ponerte en contacto con nosotros haciendo click  <a href="{{url_for('showContact')}}">aqui.</a></p>
+        <p>También puedes dar click en el botón y ver todos tus candidatos registrados</p>
+        <a href="{{url_for('showMyApplicants', company_id=company_id)}}"><button type="button" class="btn btn-primary">Ver mis candidatos</button></a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
