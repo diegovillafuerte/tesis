@@ -13,7 +13,6 @@ session = DBSession()
 
 app = Flask(__name__)
 
-
 @app.route('/', methods=['GET', 'POST'])
 def showMain():
     if request.method  == 'POST':
