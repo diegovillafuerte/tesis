@@ -16,20 +16,20 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 def getListOfMatchesForJob(job_id):
-	#try:
+	try:
 		applicants = session.query(Applicant).all()
 		matches = []
 		for i in applicants:
 			match = getMatch(job_id, i.id)
-			if match.interest_applicant:
+			if match.interest_applicant and not match.interest_job:
 				matches.append([i.name,getMatch(job_id, i.id).scores,i.id])
 		matches.sort(key=lambda x: x[1], reverse=True)
 		return matches
-	# except Exception as e:
-	# 	print(e)
-	# 	print("El error es en la función getListOfMatchesForJob de magic.py")
-	# 	flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo. Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
-	# 	return render_template("main.html")
+	except Exception as e:
+		print(e)
+		print("El error es en la función getListOfMatchesForJob de magic.py")
+		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo. Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
+		return render_template("main.html")
 
 def getListOfMatchesForApplicant(applicant_id):
 	try:

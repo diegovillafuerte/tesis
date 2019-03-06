@@ -20,7 +20,7 @@
         {% endwith %}
 
 
-      <form action="{{ url_for('startDemo')}}" method = 'POST'>
+      <form action="{{ url_for('newApplicant')}}" method = 'POST'>
         <div class="form-group">
           <label for="exampleInputName">Nombre</label>
           <input name="name" type="text" class="form-control" id="exampleInputName">
@@ -39,7 +39,7 @@
           <input name="password" type="password" class="form-control" id="exampleInputPassword1" >
         </div>
         <br><br>
-        <button name="signup" value="signup" type="submit" class="btn btn-primary">Empezar el cuestionario</button>
+        <button name="signup" value="signup" type="submit" class="btn btn-primary">Continuar</button>
       </form>
     </div>
 

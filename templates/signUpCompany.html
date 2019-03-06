@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+    <div class="container">
+      <h1>¡Estas a un paso de encontrar a los mejores empelados!</h1>
+
+
+              <!--MESSAGE FLASHING EXAMPLE -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+
+        <ul>
+        {% for message in messages %}
+          <li><strong>{{message}}</strong></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+
+      <form action="{{ url_for('newCompany')}}" method = 'POST' oninput='up2.setCustomValidity(up2.value != up.value ? "Passwords do not match")'>
+        <div class="form-group">
+          <label for="exampleInputName">Nombre</label>
+          <input name="name" type="text" class="form-control" id="exampleInputName" required>
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlTextarea1">Descripción de la empresa</label>
+          <!--<textarea name="description" maxlength="200" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Escribe una breve descripción de la empresa" required></textarea>-->
+          <input name="description" type="text" class="form-control" id="exampleFormControlTextarea1" required>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Correo electrónico</label>
+          <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{mail}}" placeholder={{mail}} required>
+          <small id="emailHelp" class="form-text text-muted">Nunca compartiremos tu correo electrónico con nadie.</small>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <input name="up1" type="password" class="form-control" id="exampleInputPassword1" required>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword2">Confirma tu password</label>
+          <input name="up2" type="password" class="form-control" id="exampleInputPassword2" required>
+        </div>
+        <br><br>
+        <button name="signup" value="signup" type="submit" class="btn btn-primary">Continuar</button>
+      </form>
+    </div>
+
+{% endblock %}
+
+

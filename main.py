@@ -53,26 +53,55 @@ def showMain():
                     return redirect(url_for('newCompany', mail = mail, password = password))
     return render_template("main.html")
 
+
 @app.route('/applicant/new', methods=['GET', 'POST'])
 @app.route('/applicant/new/<string:app_mail>/<string:app_password>', methods=['GET', 'POST'])
 def newApplicant(app_mail="", app_password=""):
-    if request.method  == 'POST':
-        mail = request.form['email']
-        password = request.form['password']
-        name = request.form['name']
-        createApplicant(name, mail, password)
-        return redirect(url_for('startDemo'))
-    return render_template('signUp.html', mail = app_mail, password = app_password)
+    try:
+        if request.method  == 'POST':
+            mail = request.form['email']
+            password = request.form['password']
+            name = request.form['name']
+            dbOperations.createApplicant(name, mail, password)
+            applicantID = session.query(Applicant).filter(Applicant.mail == mail).one().id
+            return redirect(url_for('startTest', applicant_id = applicantID))
+        return render_template('signUpApplicant.html', mail = app_mail, password = app_password)
+    except Exception as e:
+        print(e)
+        print("El error ocurrión en la función newApplicant de main.py")
+        flash("Ocurrió un error, por favor intentalo de nuevo")
+        return render_template("main.html")
 
-@app.route('/applicant/new/demo', methods=['GET', 'POST'])
-def startDemo():
-    return render_template("typeFormDemo.html")
 
-
-@app.route('/company/new')
-@app.route('/company/new/<string:mail>/<string:password>')
+@app.route('/company/new', methods=['GET', 'POST'])
+@app.route('/company/new/<string:mail>/<string:password>', methods=['GET', 'POST'])
 def newCompany(mail="", password=""):
-        return "This should show option to create a new company" + mail
+    #try:
+        if request.method  == 'POST':
+            mail = request.form['email']
+            password = request.form['up1']
+            name = request.form['name']
+            description = request.form['description']
+            dbOperations.createCompany(name, mail, password, description)
+            companyID = session.query(Company).filter(Company.mail == mail).one().id
+            return redirect(url_for('showCompany', company_id = companyID))
+        return render_template('signUpCompany.html', mail = mail, password = password)
+    # except Exception as e:
+    #     print(e)
+    #     print("El error ocurrión en la función newCompany de main.py")
+    #     flash("Ocurrió un error, por favor intentalo de nuevo")
+    #     return render_template("main.html")
+
+
+@app.route('/applicant/new/test/<int:applicant_id>', methods=['GET', 'POST'])
+def startTest(applicant_id):
+    try:
+        return render_template("typeFormDemo.html", applicant_id = applicant_id)
+    except Exception as e:
+        print(e)
+        print("El error ocurrión en la función startTest de main.py")
+        flash("Ocurrió un error, por favor intentalo de nuevo")
+        return render_template("main.html")
 
 @app.route('/job/<int:company_id>/new')
 def newJob(company_id):
@@ -86,6 +115,8 @@ def showCompany(company_id):
         return render_template("showCompany.html", jobs = jobs, company = company)
     except Exception as e:
         print(e)
+        print("El error ocurrió en showCompany de main.py")
+        flash("Ocurrió un error, por favor vuelve a intentarlo")
         return render_template("main.html")
 
 @app.route('/applicant/<int:applicant_id>/feed')
@@ -141,6 +172,7 @@ def showInterestCompany(job_id, applicant_id):
     try:
         offer = session.query(MatchScore).filter(MatchScore.job_id == job_id, MatchScore.applicant_id == applicant_id).one()
         offer.interest_job = True
+        session.commit()
         applicant = session.query(Applicant).filter(Applicant.id == applicant_id).one()
         job = session.query(Job).filter(Job.id == job_id).one()
         companyId = job.company_id
@@ -180,8 +212,28 @@ def showAbout():
 
 @app.route('/company/<int:company_id>/myApplicants') 
 def showMyApplicants(company_id):
+    '''
+    This function will take a company id and return a two dimensional list
+    with all the jobs that company has posted followed by the applicants that
+    have matched to it. For example:
+    [[job1, applicant1, applicant2],
+    [job2, applicant1, applicant3, applicant 6],
+    [job3]
+    [job4, applicant 2, applicant3, applicant4]]
+    '''
     try:
-        return render_template('myApplicants.html')
+        jobs_matches = []
+        jobs = session.query(Job).filter(Job.company_id == company_id).all()
+        for i in jobs:
+            # create a list that starts with the job (as a job object) and follows with all of that jobs matches (as applicant objects)
+            job = [i]
+            matches = session.query(MatchScore).filter(MatchScore.job_id == i.id, MatchScore.interest_job == True)
+            for j in matches:
+                applicant = [session.query(Applicant).filter(Applicant.id == j.applicant_id).one(), j.scores]
+                job.append(applicant)
+            jobs_matches.append(job)
+        company = session.query(Company).filter(Company.id == company_id).one()
+        return render_template('myApplicants.html', jobsMatches = jobs_matches, company = company)
     except Exception as e:
         print(e)
         print("El error ocurrión en la función showMyApplicants de main.py")

@@ -4,6 +4,7 @@ from sqlalchemy import create_engine, func
 from database_setup import Base, Company, Applicant, Job, MatchScore
 from sqlalchemy.orm import sessionmaker
 import random
+import magic
 
 
 engine = create_engine('postgres://localhost/simil')
@@ -32,7 +33,8 @@ def validateMail(mail):
 		true = user exists and password is correct '''
 	try:
 		company = session.query(Company).filter(func.lower(Company.mail) == func.lower(mail)).scalar()
-		if company:
+		applicant = session.query(Applicant).filter(func.lower(Applicant.mail) == func.lower(mail)).scalar()
+		if company or applicant:
 			return True
 		else:
 			return False
@@ -84,17 +86,18 @@ def createApplicant(name, mail, password):
 	try:
 		appli = Applicant(name = name, mail = mail, password=password)
 		session.add(appli)
-		session.commit()
 		all_jobs = session.query(Job).all()
 		applicant_id = session.query(Applicant).filter(Applicant.mail == mail).one().id
 		for job in all_jobs:
-			iden = job.id
-			createMatchScore(magic.matchScore(iden, applicant_id), iden, applicant_id)
+			job_id = job.id
+			createMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
+		session.commit()
 	except Exception as e:
 		print(e)
 		return render_template("main.html")
 		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo.\
 			Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
+
 
 def createCompany(name, mail, password, description):
 	''' Given a name, mail, password and description, it creates a company in the database '''
@@ -136,6 +139,7 @@ def createMatchScore(score, job_id, applicant_id):
 	except Exception as e:
 		print(e)
 		return render_template("main.html")
+		print("El error está en createMatchScore de dbOperations")
 		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo.\
 			Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
 
