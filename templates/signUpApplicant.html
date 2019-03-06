@@ -23,20 +23,20 @@
       <form action="{{ url_for('newApplicant')}}" method = 'POST'>
         <div class="form-group">
           <label for="exampleInputName">Nombre</label>
-          <input name="name" type="text" class="form-control" id="exampleInputName">
+          <input name="name" type="text" class="form-control" id="exampleInputName" required>
         </div>
         <div class="form-group">
           <label for="exampleInputEmail1">Correo electrónico</label>
-          <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder={{mail}}>
+          <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{mail}}" placeholder={{mail}} required>
           <small id="emailHelp" class="form-text text-muted">Nunca compartiremos tu correo electrónico con nadie.</small>
         </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Password</label>
-          <input name="password" type="password" class="form-control" id="exampleInputPassword1" >
+          <input name="password" type="password" class="form-control" id="exampleInputPassword1" required>
         </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Confirma tu password</label>
-          <input name="password" type="password" class="form-control" id="exampleInputPassword1" >
+          <input name="password" type="password" class="form-control" id="exampleInputPassword1" required="">
         </div>
         <br><br>
         <button name="signup" value="signup" type="submit" class="btn btn-primary">Continuar</button>

@@ -64,7 +64,7 @@ def newApplicant(app_mail="", app_password=""):
             name = request.form['name']
             dbOperations.createApplicant(name, mail, password)
             applicantID = session.query(Applicant).filter(Applicant.mail == mail).one().id
-            return redirect(url_for('startTest', applicant_id = applicantID))
+            return redirect(url_for('startTestApplicant', applicant_id = applicantID))
         return render_template('signUpApplicant.html', mail = app_mail, password = app_password)
     except Exception as e:
         print(e)
@@ -73,10 +73,21 @@ def newApplicant(app_mail="", app_password=""):
         return render_template("main.html")
 
 
+@app.route('/applicant/new/test/<int:applicant_id>', methods=['GET', 'POST'])
+def startTestApplicant(applicant_id):
+    try:
+        return render_template("typeFormDemoApplicants.html", applicant_id = applicant_id)
+    except Exception as e:
+        print(e)
+        print("El error ocurrión en la función startTestApplicant de main.py")
+        flash("Ocurrió un error, por favor intentalo de nuevo")
+        return render_template("main.html")
+
+
 @app.route('/company/new', methods=['GET', 'POST'])
 @app.route('/company/new/<string:mail>/<string:password>', methods=['GET', 'POST'])
 def newCompany(mail="", password=""):
-    #try:
+    try:
         if request.method  == 'POST':
             mail = request.form['email']
             password = request.form['up1']
@@ -86,26 +97,46 @@ def newCompany(mail="", password=""):
             companyID = session.query(Company).filter(Company.mail == mail).one().id
             return redirect(url_for('showCompany', company_id = companyID))
         return render_template('signUpCompany.html', mail = mail, password = password)
-    # except Exception as e:
-    #     print(e)
-    #     print("El error ocurrión en la función newCompany de main.py")
-    #     flash("Ocurrió un error, por favor intentalo de nuevo")
-    #     return render_template("main.html")
-
-
-@app.route('/applicant/new/test/<int:applicant_id>', methods=['GET', 'POST'])
-def startTest(applicant_id):
-    try:
-        return render_template("typeFormDemo.html", applicant_id = applicant_id)
     except Exception as e:
         print(e)
-        print("El error ocurrión en la función startTest de main.py")
+        print("El error ocurrión en la función newCompany de main.py")
         flash("Ocurrió un error, por favor intentalo de nuevo")
         return render_template("main.html")
 
-@app.route('/job/<int:company_id>/new')
+
+@app.route('/job/<int:company_id>/new', methods=['GET', 'POST'])
 def newJob(company_id):
-        return "This should show option to create a new job"
+    try:
+        if request.method  == 'POST':
+            print("Aquí si llego")
+            title = request.form['title']
+            description = request.form['description']
+            openings = request.form['openings']
+            salary = request.form['salary']
+            activa = request.form['radiosactiva']
+            status = False
+            if activa == 'activa':
+                status = True
+            dbOperations.createJob(title, salary, description, company_id, openings, status)
+            companyID = session.query(Job).filter(Job.company_id == company_id, Job.title == title).one().company_id
+            return redirect(url_for('startTestJob', company_id = companyID))
+        else:
+            return render_template('createJob.html', company_id = company_id)
+    except Exception as e:
+        print(e)
+        print("El error ocurrión en la función newJob de main.py")
+        flash("Ocurrió un error, por favor intentalo de nuevo")
+        return render_template("main.html")
+
+@app.route('/job/new/test/<int:company_id>', methods=['GET', 'POST'])
+def startTestJob(company_id):
+    try:
+        return render_template("typeFormDemoJob.html", company_id = company_id)
+    except Exception as e:
+        print(e)
+        print("El error ocurrión en la función startTestJob de main.py")
+        flash("Ocurrió un error, por favor intentalo de nuevo")
+        return render_template("main.html")
 
 @app.route('/company/<int:company_id>/feed')
 def showCompany(company_id):

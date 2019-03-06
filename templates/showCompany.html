@@ -4,8 +4,14 @@
 
   <div class="container">
   <h1>Hola, {{company.name}}, estas son todas tus vacantes</h1>
-
-    {% if matches|length == 0 %} 
+  <div class="container">
+    <br>
+      <div>
+        <a href="{{url_for('newJob', company_id=company.id)}}"><button type="button" class="btn btn-primary float-right">Agregar una vacante</button></a>
+      </div>
+    <br><br><br>
+  </div>
+    {% if jobs|length == 0 %} 
       <div class="jumbotron">
         <p>Por el momento no tienes ninguna vacante.</p>
       </div>
@@ -34,7 +40,6 @@
         <br>
       {% endfor %}
     {% endif %}
-
 
   
   </div>

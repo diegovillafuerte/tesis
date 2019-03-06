@@ -36,8 +36,10 @@ def getListOfMatchesForApplicant(applicant_id):
 		jobs = session.query(Job).filter(Job.status==True)
 		matches = []
 		for i in jobs:
-			company_name = session.query(Company).filter(Company.id == i.company_id).one().name
-			matches.append([i.id, i.title, locale.currency(i.salary, grouping=True), i.description, getMatch(i.id, applicant_id).scores , company_name])
+			match = getMatch(i.id, applicant_id)
+			if not match.interest_applicant:
+				company_name = session.query(Company).filter(Company.id == i.company_id).one().name
+				matches.append([i.id, i.title, locale.currency(i.salary, grouping=True), i.description, match.scores , company_name])
 		matches.sort(key=lambda x: x[4], reverse=True)
 		return matches
 	except Exception as e:

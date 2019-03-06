@@ -118,13 +118,13 @@ def createJob(title, salary, description, company_id, openings, status):
 	try:
 		trab = Job(title = title, salary = salary, description = description , company_id = company_id, openings=openings)
 		session.add(trab)
-		session.commit()
 		all_applicants = session.query(Applicant).all()
 		job = session.query(Job).filter(Job.title == title, Job.company_id == company_id).one()
 		job_id = job.id
 		for applicant in all_applicants:
 			applicant_id = applicant.id
 			createMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
+		session.commit()
 	except Exception as e:
 		print(e)
 		return render_template("main.html")

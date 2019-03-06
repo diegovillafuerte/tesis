@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+    <div class="container">
+      <h1>Estas a un paso de recibir las mejores ofertas de trabajo</h1>
+
+
+              <!--MESSAGE FLASHING EXAMPLE -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+
+        <ul>
+        {% for message in messages %}
+          <li><strong>{{message}}</strong></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+
+      <form action="{{url_for('newJob', company_id = company_id)}}" method = 'POST'>
+        <div class="form-group">
+          <label for="title">Titulo del puesto</label>
+          <input name="title" type="text" class="form-control" id="title">
+        </div>
+        <div class="form-group">
+          <label for="salary">Salario</label>
+          <input name="salary" type="text" class="form-control" id="salary" placeholder="Ingresa el salario que percibe esta posición">
+        </div>
+        <div class="form-group">
+          <label for="descripcion">Descripción del puesto</label>
+          <!--<textarea name="description" maxlength="200" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Escribe una breve descripción de la empresa" required></textarea>-->
+          <input name="description" type="text" class="form-control" id="descripcion" required>
+        </div>
+        <div class="form-group">
+          <label for="openings">Número de posiciones</label>
+          <input name="openings" type="text" class="form-control" id="openings" placeholder="Ingresa el número de posiciones disponibles para está vacante">
+        </div>
+        <div class="form-check-inline">
+          <input class="form-check-input" type="radio" name="radiosactiva" id="exampleRadios1" value="activa" required>
+          <label class="form-check-label" for="exampleRadios1">
+            La vacante está activa
+          </label>
+        </div>
+        <div class="form-check-inline">
+          <input class="form-check-input" type="radio" name="radiosactiva" id="exampleRadios2" value="inactiva">
+          <label class="form-check-label" for="exampleRadios2">
+            La vacante está inactiva
+          </label>
+        </div>
+        <br><br>
+        <button name="signup" value="signup" type="submit" class="btn btn-primary">Continuar</button>
+      </form>
+    </div>
+
+{% endblock %}
