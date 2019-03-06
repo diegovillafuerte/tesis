@@ -26,6 +26,20 @@ def validateApplicant(mail, password):
 		print(e)
 		return False
 
+def validateMail(mail):
+	''' Validates whether or not the company exists in the 
+		database and if the password is correct
+		true = user exists and password is correct '''
+	try:
+		company = session.query(Company).filter(func.lower(Company.mail) == func.lower(mail)).scalar()
+		if company:
+			return True
+		else:
+			return False
+	except Exception as e:
+		print(e)
+		return False
+
 def validateCompany(mail, password):
 	''' Validates whether or not the company exists in the 
 		database and if the password is correct
@@ -76,7 +90,6 @@ def createApplicant(name, mail, password):
 		for job in all_jobs:
 			iden = job.id
 			createMatchScore(magic.matchScore(iden, applicant_id), iden, applicant_id)
-
 	except Exception as e:
 		print(e)
 		return render_template("main.html")
@@ -126,6 +139,8 @@ def createMatchScore(score, job_id, applicant_id):
 		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo.\
 			Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
 
+def sendInfoToCompany(applicant_id, job_id):
+	return True
 
 def printDB():
 	print("==============Applicants================")

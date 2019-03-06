@@ -3,7 +3,30 @@
 {% block content %}
 
   <div class="container">
-    <h1>Estos son los empleados con los que ya hiciste match:</h1>
+  <h1>Hola, {{company.name}}, estas son todas tus vacantes</h1>
+  {% for i in jobs %}
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-9">{{i.title}}</div>
+          <div class="col-3">
+            {%if i.status %}
+              <span class="badge badge-success">Activa</span>
+            {% else %}
+              <span class="badge badge-danger">Inactiva</span>
+            {%endif%}
+          </div>
+        </div>   
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">${{i.salary}} pesos mensuales</h5>
+        <p class="card-text">{{i.description}}</p>
+        <p class="card-text">{{i.openings}} posiciones disponibles</p>
+        <a href="{{url_for('showJob', job_id=i.id)}}" class="btn btn-primary">Ingresar a la vacante</a>
+      </div>
+    </div>
+    <br>
+  {% endfor %}
   </div>
 
 {% endblock %}

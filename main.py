@@ -42,21 +42,32 @@ def showMain():
                     flash("El correo o contraseña son incorrectos. Por favor intenta de nuevo")
         else:
             if client_type == "applicant":
-                if dbOperations.validateApplicant(mail, password):
-                    flash("Ya existe un aplicante registrado con ese correo y esa contraseña")
+                if dbOperations.validateMail(mail):
+                    flash("Ya existe un aplicante registrado con ese correo")
                 else:
                     return redirect(url_for('newApplicant', app_mail=mail, app_password=password))
             else:
-                if dbOperations.validateCompany(mail, password):
-                    flash("Ya existe una compañía registrado con esos correo y contraseña")
+                if dbOperations.validateMail(mail):
+                    flash("Ya existe una compañía registrado con ese correo")
                 else:
                     return redirect(url_for('newCompany', mail = mail, password = password))
     return render_template("main.html")
 
-@app.route('/applicant/new')
-@app.route('/applicant/new/<string:app_mail>/<string:app_password>')
+@app.route('/applicant/new', methods=['GET', 'POST'])
+@app.route('/applicant/new/<string:app_mail>/<string:app_password>', methods=['GET', 'POST'])
 def newApplicant(app_mail="", app_password=""):
-        return "This should show option to create a new applicant" + app_mail
+    if request.method  == 'POST':
+        mail = request.form['email']
+        password = request.form['password']
+        name = request.form['name']
+        createApplicant(name, mail, password)
+        return redirect(url_for('startDemo'))
+    return render_template('signUp.html', mail = app_mail, password = app_password)
+
+@app.route('/applicant/new/demo', methods=['GET', 'POST'])
+def startDemo():
+    return render_template("typeFormDemo.html")
+
 
 @app.route('/company/new')
 @app.route('/company/new/<string:mail>/<string:password>')
@@ -127,20 +138,57 @@ def deleteJob(job_id):
 
 @app.route('/job/<int:job_id>/<int:applicant_id>/interest')
 def showInterestCompany(job_id, applicant_id):
-    return"This should be the confirmation of a job interest by a company for job "+str(job_id)+ " in applicant " +str(applicant_id)
+    try:
+        offer = session.query(MatchScore).filter(MatchScore.job_id == job_id, MatchScore.applicant_id == applicant_id).one()
+        offer.interest_job = True
+        applicant = session.query(Applicant).filter(Applicant.id == applicant_id).one()
+        job = session.query(Job).filter(Job.id == job_id).one()
+        companyId = job.company_id
+        if dbOperations.sendInfoToCompany(applicant_id, job_id):
+            return render_template('showInterestJob.html', company_id = companyId, applicant = applicant , job = job)
+        else:
+            print("El error ocurrión en la función showInterestJob de main.py")
+            flash("Ocurrió un error, por favor intentalo de nuevo")
+            return render_template("main.html")
+    except Exception as e:
+        print(e)
+        print("El error ocurrión en la función showInterestJob de main.py")
+        flash("Ocurrió un error, por favor intentalo de nuevo")
+        return render_template("main.html")
 
 @app.route('/applicant/<int:job_id>/<int:applicant_id>/interest')
 def showInterestApplicant(job_id, applicant_id):
     try:
         offer = session.query(MatchScore).filter(MatchScore.job_id == job_id, MatchScore.applicant_id == applicant_id).one()
         offer.interest_applicant = True
+        session.commit()
         #return"This should be the confirmation of a job interest by applicant "+str(applicant_id)+ " in job " +str(job_id)
-        return render_template('showInterestApplicant.html')
+        return render_template('showInterestApplicant.html', applicantID = applicant_id)
     except Exception as e:
         print(e)
-        print("El error ocurrión en la función showInteresApplicant de main.py")
+        print("El error ocurrión en la función showInterestApplicant de main.py")
         flash("Ocurrió un error, por favor intentalo de nuevo")
         return render_template("main.html")
+
+@app.route('/contact') 
+def showContact():
+    return render_template('contact.html')
+
+@app.route('/about') 
+def showAbout():
+    return render_template('about.html')
+
+@app.route('/company/<int:company_id>/myApplicants') 
+def showMyApplicants(company_id):
+    try:
+        return render_template('myApplicants.html')
+    except Exception as e:
+        print(e)
+        print("El error ocurrión en la función showMyApplicants de main.py")
+        flash("Ocurrió un error, por favor intentalo de nuevo")
+        return render_template("main.html")
+
+
 
 
 

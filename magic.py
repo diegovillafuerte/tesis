@@ -16,18 +16,20 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 def getListOfMatchesForJob(job_id):
-	try:
+	#try:
 		applicants = session.query(Applicant).all()
 		matches = []
 		for i in applicants:
-			matches.append([i.name,getMatchScore(job_id, i.id),i.id])
+			match = getMatch(job_id, i.id)
+			if match.interest_applicant:
+				matches.append([i.name,getMatch(job_id, i.id).scores,i.id])
 		matches.sort(key=lambda x: x[1], reverse=True)
 		return matches
-	except Exception as e:
-		print(e)
-		print("El error es en la función getListOfMatchesForJob de magic.py")
-		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo. Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
-		return render_template("main.html")
+	# except Exception as e:
+	# 	print(e)
+	# 	print("El error es en la función getListOfMatchesForJob de magic.py")
+	# 	flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo. Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
+	# 	return render_template("main.html")
 
 def getListOfMatchesForApplicant(applicant_id):
 	try:
@@ -35,7 +37,7 @@ def getListOfMatchesForApplicant(applicant_id):
 		matches = []
 		for i in jobs:
 			company_name = session.query(Company).filter(Company.id == i.company_id).one().name
-			matches.append([i.id, i.title, locale.currency(i.salary, grouping=True), i.description, getMatchScore(i.id, applicant_id) , company_name])
+			matches.append([i.id, i.title, locale.currency(i.salary, grouping=True), i.description, getMatch(i.id, applicant_id).scores , company_name])
 		matches.sort(key=lambda x: x[4], reverse=True)
 		return matches
 	except Exception as e:
@@ -44,10 +46,10 @@ def getListOfMatchesForApplicant(applicant_id):
 		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo. Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
 		return render_template("main.html")
 
-def getMatchScore(job_id, applicant_id):
+def getMatch(job_id, applicant_id):
 	try:
 		score = session.query(MatchScore).filter(MatchScore.job_id==job_id, MatchScore.applicant_id==applicant_id).one()
-		return score.scores
+		return score
 	except Exception as e:
 		print(e)
 		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo. Si el problema es persistente te pedimos que te pongas en contacto con nosotros")

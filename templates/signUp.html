@@ -4,7 +4,9 @@
 
 
     <div class="container">
-      <h1>Bienvenido a Simil</h1>
+      <h1>Estas a un paso de recibir las mejores ofertas de trabajo</h1>
+
+
               <!--MESSAGE FLASHING EXAMPLE -->
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -16,32 +18,28 @@
         </ul>
         {% endif %}
         {% endwith %}
-      <form action="{{ url_for('showMain')}}" method = 'POST'>
+
+
+      <form action="{{ url_for('startDemo')}}" method = 'POST'>
+        <div class="form-group">
+          <label for="exampleInputName">Nombre</label>
+          <input name="name" type="text" class="form-control" id="exampleInputName">
+        </div>
         <div class="form-group">
           <label for="exampleInputEmail1">Correo electrónico</label>
-          <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+          <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder={{mail}}>
           <small id="emailHelp" class="form-text text-muted">Nunca compartiremos tu correo electrónico con nadie.</small>
         </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Password</label>
-          <input name="password"type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+          <input name="password" type="password" class="form-control" id="exampleInputPassword1" >
         </div>
-        <div class="form-check-inline">
-          <input class="form-check-input" type="radio" name="radiosTipodecliente" id="exampleRadios1" value="applicant">
-          <label class="form-check-label" for="exampleRadios1">
-            Soy un aplicante
-          </label>
-        </div>
-        <div class="form-check-inline">
-          <input class="form-check-input" type="radio" name="radiosTipodecliente" id="exampleRadios2" value="company">
-          <label class="form-check-label" for="exampleRadios2">
-            Soy una compañía
-          </label>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Confirma tu password</label>
+          <input name="password" type="password" class="form-control" id="exampleInputPassword1" >
         </div>
         <br><br>
-        <button name="login" value="login" type="submit" class="btn btn-primary">Ingresar a tu cuenta</button>
-        <br><br>
-        <button name="signup" value="signup" type="submit" class="btn btn-primary">Crear una cuenta</button>
+        <button name="signup" value="signup" type="submit" class="btn btn-primary">Empezar el cuestionario</button>
       </form>
     </div>
 
