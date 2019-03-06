@@ -1,1 +1,1 @@
-web: gunicorn app:tesis
+web: gunicorn app:main
