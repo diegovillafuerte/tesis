@@ -5,7 +5,8 @@ from database_setup import Base, Company, Applicant, Job, MatchScore
 from sqlalchemy.orm import sessionmaker
 import dbOperations, magic
 
-engine = create_engine('postgres://localhost/simil')
+#engine = create_engine('postgres://localhost/simil') Está es la versión que funciona localmente
+engine = create_engine(os.environ['DATABASE_URL'])
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -276,5 +277,5 @@ def showMyApplicants(company_id):
 
 if __name__ == '__main__':
         #app.secret_key = 'Super secret key'
-        #app.debug = True
-        app.run#(host='0.0.0.0', port=5000)
+        app.debug = True
+        app.run()#(host='0.0.0.0', port=5000)

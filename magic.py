@@ -9,7 +9,8 @@ import locale
 #Importar formateo de dinero
 locale.setlocale( locale.LC_ALL, 'en_CA.UTF-8' )
 
-engine = create_engine('postgres://localhost/simil')
+#engine = create_engine('postgres://localhost/simil') funciona local
+engine = create_engine(os.environ['DATABASE_URL'])
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)

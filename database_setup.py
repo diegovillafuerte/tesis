@@ -4,12 +4,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 import psycopg2
 
-db_string = 'postgres://localhost/simil'
-
+#db_string = 'postgres://localhost/simil' Funciona local
+db_string = os.environ['DATABASE_URL']
 db = create_engine(db_string)
-
 Base = declarative_base()
-
 
 class Company(Base):
 

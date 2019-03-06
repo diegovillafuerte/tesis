@@ -7,7 +7,8 @@ import random
 import magic
 
 
-engine = create_engine('postgres://localhost/simil')
+#engine = create_engine('postgres://localhost/simil') fnciona local
+engine = create_engine(os.environ['DATABASE_URL'])
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
