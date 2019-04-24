@@ -20,7 +20,7 @@ DBSession = sessionmaker(bind=db)
 session = DBSession()
 
 #Setup the api key for the api call
-API_key = 'AIzaSyD7dxFiUZuFca-dU-uLgVqL4oJ9q7P14fY'
+API_key = 'API-KEY'
 gmaps = googlemaps.Client(key=API_key)
 
 def getListOfMatchesForJob(job_id):
