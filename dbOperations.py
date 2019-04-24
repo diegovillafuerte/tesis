@@ -19,203 +19,247 @@ session = DBSession()
 
 
 def addDemo(birthdate, zipcode, gender, civil, dependientes, estudios, applicant_id):
-	#distTot es el número de días entre 01/01/1900 y la fecha de nacimiento del aplicante
-	distYears = (int(birthdate[6:10]) - 1900) * 365
-	distMonth = (int(birthdate[3:5]) - 1) * 30
-	distDays = (int(birthdate[0:2]))
-	distTot = distYears + distMonth + distDays
+	try:
+		#distTot es el número de días entre 01/01/1900 y la fecha de nacimiento del aplicante
+		distYears = (int(birthdate[6:10]) - 1900) * 365
+		distMonth = (int(birthdate[3:5]) - 1) * 30
+		distDays = (int(birthdate[0:2]))
+		distTot = distYears + distMonth + distDays
 
-	#zipc es el código postal como entero con un 1 añadido al principio para mantener los 0 iniciales
-	zipc = int('1' + zipcode[0:6])
+		#zipc es el código postal como entero con un 1 añadido al principio para mantener los 0 iniciales
+		zipc = int('1' + zipcode[0:6])
 
-	#gen es el código de género con un 1 añadido al principio para mantener los 0 iniciales
-	gen = int('1' + gender)
+		#gen es el código de género con un 1 añadido al principio para mantener los 0 iniciales
+		gen = int('1' + gender)
 
-	# civ es el código de estado civil con un 1 añadido al principio para mantener los 0 iniciales
-	civ = int('1' + civil)
+		# civ es el código de estado civil con un 1 añadido al principio para mantener los 0 iniciales
+		civ = int('1' + civil)
 
-	# dep es el número de dependientes económicos como entero
-	dep = int(dependientes)
+		# dep es el número de dependientes económicos como entero
+		dep = int(dependientes)
 
-	# est es el código de estudios con un 1 añadido al principio para mantener los 0 iniciales
-	est = int('1' + estudios)
+		# est es el código de estudios con un 1 añadido al principio para mantener los 0 iniciales
+		est = int('1' + estudios)
 
-	# demo es el arreglo con todos los valores del test demográfico
-	demo = [distTot, zipc, gen, civ, dep, est]		
+		# demo es el arreglo con todos los valores del test demográfico
+		demo = [distTot, zipc, gen, civ, dep, est]		
 
-	# Se agrega a la base de datos en el usuario que ya fue creado
-	aplicante = session.query(Applicant).filter(Applicant.id == applicant_id).one()
-	aplicante.demografico = demo
-	session.commit()
+		# Se agrega a la base de datos en el usuario que ya fue creado
+		aplicante = session.query(Applicant).filter(Applicant.id == applicant_id).one()
+		aplicante.demografico = demo
+		session.commit()
+	except Exception as e:
+		print(e)
+		print("El error ocurrió en la función addDemo de dbOperations.py")
 
 
 def addDemoJob(birthdate, zipcode, gender, civil, dependientes, estudios, company_id, job_id):
-	#distTot es el número de días entre 01/01/1900 y la fecha de nacimiento del aplicante
-	distYears = (int(birthdate[6:10]) - 1900) * 365
-	distMonth = (int(birthdate[3:5]) - 1) * 30
-	distDays = (int(birthdate[0:2]))
-	distTot = distYears + distMonth + distDays
+	try:
+		#distTot es el número de días entre 01/01/1900 y la fecha de nacimiento del aplicante
+		distYears = (int(birthdate[6:10]) - 1900) * 365
+		distMonth = (int(birthdate[3:5]) - 1) * 30
+		distDays = (int(birthdate[0:2]))
+		distTot = distYears + distMonth + distDays
 
-	#zipc es el código postal como entero con un 1 añadido al principio para mantener los 0 iniciales
-	zipc = int('1' + zipcode[0:6])
+		#zipc es el código postal como entero con un 1 añadido al principio para mantener los 0 iniciales
+		zipc = int('1' + zipcode[0:6])
 
-	#gen es el código de género con un 1 añadido al principio para mantener los 0 iniciales
-	gen = int('1' + gender)
+		#gen es el código de género con un 1 añadido al principio para mantener los 0 iniciales
+		gen = int('1' + gender)
 
-	# civ es el código de estado civil con un 1 añadido al principio para mantener los 0 iniciales
-	civ = int('1' + civil)
+		# civ es el código de estado civil con un 1 añadido al principio para mantener los 0 iniciales
+		civ = int('1' + civil)
 
-	# dep es el número de dependientes económicos como entero
-	dep = int(dependientes)
+		# dep es el número de dependientes económicos como entero
+		dep = int(dependientes)
 
-	# est es el código de estudios con un 1 añadido al principio para mantener los 0 iniciales
-	est = int('1' + estudios)
+		# est es el código de estudios con un 1 añadido al principio para mantener los 0 iniciales
+		est = int('1' + estudios)
 
-	# demo es el arreglo con todos los valores del test demográfico
-	demo = [distTot, zipc, gen, civ, dep, est]		
+		# demo es el arreglo con todos los valores del test demográfico
+		demo = [distTot, zipc, gen, civ, dep, est]		
 
-	# Se agrega a la base de datos en el usuario que ya fue creado
-	job = session.query(Job).filter(Job.id == job_id, Job.company_id == company_id).one()
-	nuevo = job.demografico
-	if nuevo is not None:
-		nuevo.append(demo)
-		session.query(Job).filter(Job.id == job_id, Job.company_id == company_id).update({"demografico":nuevo})
-		session.commit()
-	else:
-		job.demografico = [demo]
+		# Se agrega a la base de datos en el usuario que ya fue creado
+		job = session.query(Job).filter(Job.id == job_id, Job.company_id == company_id).one()
+		nuevo = job.demografico
+		if nuevo is not None:
+			nuevo.append(demo)
+			session.query(Job).filter(Job.id == job_id, Job.company_id == company_id).update({"demografico":nuevo})
+			session.commit()
+		else:
+			job.demografico = [demo]
+			session.commit()
+	except Exception as e:
+		print(e)
+		print("El error ocurrió en la función addDemoJob de dbOperations.py")
 
 
 def addPersonality(response, applicant_id):
-	# Calculate Factor I Surgency or Extraversion
-	f1 = 0
-	f1 = f1 + int(response['p1'])
-	f1 = f1 - int(response['p6'])
-	f1 = f1 + int(response['p11'])
-	f1 = f1 - int(response['p16'])
-	f1 = math.floor((f1 + 8)*100/16)
+	try:
+		# Calculate Factor I Surgency or Extraversion
+		f1 = 0
+		f1 = f1 + int(response['p1'])
+		f1 = f1 - int(response['p6'])
+		f1 = f1 + int(response['p11'])
+		f1 = f1 - int(response['p16'])
+		f1 = math.floor((f1 + 8)*100/16)
 
-	# Calculate Factor II Agreeableness 
-	f2 = 0
-	f2 = f2 + int(response['p2'])
-	f2 = f2 - int(response['p7'])
-	f2 = f2 + int(response['p12'])
-	f2 = f2 - int(response['p17'])
-	f2 = math.floor((f2 + 8)*100/16)
+		# Calculate Factor II Agreeableness 
+		f2 = 0
+		f2 = f2 + int(response['p2'])
+		f2 = f2 - int(response['p7'])
+		f2 = f2 + int(response['p12'])
+		f2 = f2 - int(response['p17'])
+		f2 = math.floor((f2 + 8)*100/16)
 
-	# Calculate Factor III Conscientiousness
-	f3 = 0
-	f3 = f3 + int(response['p3'])
-	f3 = f3 - int(response['p8'])
-	f3 = f3 + int(response['p13'])
-	f3 = f3 - int(response['p18'])
-	f3 = math.floor((f3 + 8)*100/16)
+		# Calculate Factor III Conscientiousness
+		f3 = 0
+		f3 = f3 + int(response['p3'])
+		f3 = f3 - int(response['p8'])
+		f3 = f3 + int(response['p13'])
+		f3 = f3 - int(response['p18'])
+		f3 = math.floor((f3 + 8)*100/16)
 
-	# Calculate Factor IV Neuroticism
-	f4 = 0
-	f4 = f4 + int(response['p4'])
-	f4 = f4 - int(response['p9'])
-	f4 = f4 + int(response['p14'])
-	f4 = f4 - int(response['p19'])
-	f4 = math.floor((f4 + 8)*100/16)
+		# Calculate Factor IV Neuroticism
+		f4 = 0
+		f4 = f4 + int(response['p4'])
+		f4 = f4 - int(response['p9'])
+		f4 = f4 + int(response['p14'])
+		f4 = f4 - int(response['p19'])
+		f4 = math.floor((f4 + 8)*100/16)
 
-	# Calculate Factor V Intellect or Imagination
-	f5 = 0
-	f5 = f5 + int(response['p5'])
-	f5 = f5 - int(response['p10'])
-	f5 = f5 - int(response['p15'])
-	f5 = f5 - int(response['p20'])
-	f5 = math.floor((f5 + 14)*100/16)
+		# Calculate Factor V Intellect or Imagination
+		f5 = 0
+		f5 = f5 + int(response['p5'])
+		f5 = f5 - int(response['p10'])
+		f5 = f5 - int(response['p15'])
+		f5 = f5 - int(response['p20'])
+		f5 = math.floor((f5 + 14)*100/16)
 
-	resp = [f1, f2, f3, f4, f5]
-	aplicante = session.query(Applicant).filter(Applicant.id == applicant_id).one()
-	aplicante.personalidad = resp
-	session.commit()
+		resp = [f1, f2, f3, f4, f5]
+		aplicante = session.query(Applicant).filter(Applicant.id == applicant_id).one()
+		aplicante.personalidad = resp
+		session.commit()
+	except Exception as e:
+		print(e)
+		print("El error ocurrió en la función addPersonality the dbOperations.py")
 
 
 def addPersonalityJob(response, company_id, job_id):
-	# Calculate Factor I Surgency or Extraversion
-	f1 = 0
-	f1 = f1 + int(response['p1'])
-	f1 = f1 - int(response['p6'])
-	f1 = f1 + int(response['p11'])
-	f1 = f1 - int(response['p16'])
-	f1 = math.floor((f1 + 8)*100/16)
+	try:
+		# Calculate Factor I Surgency or Extraversion
+		f1 = 0
+		f1 = f1 + int(response['p1'])
+		f1 = f1 - int(response['p6'])
+		f1 = f1 + int(response['p11'])
+		f1 = f1 - int(response['p16'])
+		f1 = math.floor((f1 + 8)*100/16)
 
-	# Calculate Factor II Agreeableness 
-	f2 = 0
-	f2 = f2 + int(response['p2'])
-	f2 = f2 - int(response['p7'])
-	f2 = f2 + int(response['p12'])
-	f2 = f2 - int(response['p17'])
-	f2 = math.floor((f2 + 8)*100/16)
+		# Calculate Factor II Agreeableness 
+		f2 = 0
+		f2 = f2 + int(response['p2'])
+		f2 = f2 - int(response['p7'])
+		f2 = f2 + int(response['p12'])
+		f2 = f2 - int(response['p17'])
+		f2 = math.floor((f2 + 8)*100/16)
 
-	# Calculate Factor III Conscientiousness
-	f3 = 0
-	f3 = f3 + int(response['p3'])
-	f3 = f3 - int(response['p8'])
-	f3 = f3 + int(response['p13'])
-	f3 = f3 - int(response['p18'])
-	f3 = math.floor((f3 + 8)*100/16)
+		# Calculate Factor III Conscientiousness
+		f3 = 0
+		f3 = f3 + int(response['p3'])
+		f3 = f3 - int(response['p8'])
+		f3 = f3 + int(response['p13'])
+		f3 = f3 - int(response['p18'])
+		f3 = math.floor((f3 + 8)*100/16)
 
-	# Calculate Factor IV Neuroticism
-	f4 = 0
-	f4 = f4 + int(response['p4'])
-	f4 = f4 - int(response['p9'])
-	f4 = f4 + int(response['p14'])
-	f4 = f4 - int(response['p19'])
-	f4 = math.floor((f4 + 8)*100/16)
+		# Calculate Factor IV Neuroticism
+		f4 = 0
+		f4 = f4 + int(response['p4'])
+		f4 = f4 - int(response['p9'])
+		f4 = f4 + int(response['p14'])
+		f4 = f4 - int(response['p19'])
+		f4 = math.floor((f4 + 8)*100/16)
 
-	# Calculate Factor V Intellect or Imagination
-	f5 = 0
-	f5 = f5 + int(response['p5'])
-	f5 = f5 - int(response['p10'])
-	f5 = f5 - int(response['p15'])
-	f5 = f5 - int(response['p20'])
-	f5 = math.floor((f5 + 14)*100/16)
+		# Calculate Factor V Intellect or Imagination
+		f5 = 0
+		f5 = f5 + int(response['p5'])
+		f5 = f5 - int(response['p10'])
+		f5 = f5 - int(response['p15'])
+		f5 = f5 - int(response['p20'])
+		f5 = math.floor((f5 + 14)*100/16)
 
-	resp = [f1, f2, f3, f4, f5]
+		resp = [f1, f2, f3, f4, f5]
 
-	job = session.query(Job).filter(Job.id == job_id, Job.company_id == company_id).one()
-	nuevo = job.personalidad
-	if nuevo is not None:
-		nuevo.append(resp)
-		session.query(Job).filter(Job.id == job_id, Job.company_id == company_id).update({"personalidad":nuevo})
-		session.commit()
-	else:
-		job.personalidad = [resp]
+		job = session.query(Job).filter(Job.id == job_id, Job.company_id == company_id).one()
+		nuevo = job.personalidad
+		if nuevo is not None:
+			nuevo.append(resp)
+			session.query(Job).filter(Job.id == job_id, Job.company_id == company_id).update({"personalidad":nuevo})
+			session.commit()
+		else:
+			job.personalidad = [resp]
+			session.commit()
+	except Exception as e:
+		print(e)
+		print("El error ocurrió en la función addPersonalityJob the dbOperations.py")
 
 
 def addMath(response, applicant_id):
-	# Calculate Factor I Surgency or Extraversion
-	grade = 0
-	questions = ['p1','p2','p3','p4','p5','p6','p7','p8','p9','p10']
-	answers = ['3', '2', '3', '4', '5', '5', '5', '4', '4', '4']
-	for i in range(len(questions)):
-		if response[questions[i]] == answers[i]:
-			grade = grade + 1
-	skills = [grade]
-	aplicante = session.query(Applicant).filter(Applicant.id == applicant_id).one()
-	aplicante.skills = skills
-	session.commit()
+	try:
+		grade = 0
+		questions = ['p1','p2','p3','p4','p5','p6','p7','p8','p9','p10']
+		answers = ['3', '2', '3', '4', '5', '5', '5', '4', '4', '4']
+		for i in range(len(questions)):
+			if response[questions[i]] == answers[i]:
+				grade = grade + 1
+		skills = [grade]
+		aplicante = session.query(Applicant).filter(Applicant.id == applicant_id).one()
+		aplicante.skills = skills
+		session.commit()
+
+		all_jobs = session.query(Job).all()
+		for job in all_jobs:
+			job_id = job.id
+			createMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
+	except Exception as e:
+		print(e)
+		print("El error ocurrió en la función addMath the dbOperations.py")
 
 
 def addMathJob(response, company_id, job_id):
-	# Calculate Factor I Surgency or Extraversion
-	grade = 0
-	questions = ['p1','p2','p3','p4','p5','p6','p7','p8','p9','p10']
-	answers = ['3', '2', '3', '4', '5', '5', '5', '4', '4', '4']
-	for i in range(len(questions)):
-		if response[questions[i]] == answers[i]:
-			grade = grade + 1
-	skill = [grade]
-	job = session.query(Job).filter(Job.id == job_id, Job.company_id == company_id).one()
-	nuevo = job.skills
-	if nuevo is not None:
-		nuevo.append(skill)
-		session.query(Job).filter(Job.id == job_id, Job.company_id == company_id).update({"skills":nuevo})
-		session.commit()
-	else:
-		job.skills = [skill]
+	try:
+		grade = 0
+		questions = ['p1','p2','p3','p4','p5','p6','p7','p8','p9','p10']
+		answers = ['3', '2', '3', '4', '5', '5', '5', '4', '4', '4']
+		for i in range(len(questions)):
+			if response[questions[i]] == answers[i]:
+				grade = grade + 1
+		skill = [grade]
+		job = session.query(Job).filter(Job.id == job_id, Job.company_id == company_id).one()
+		nuevo = job.skills
+		if nuevo is not None:
+			nuevo.append(skill)
+			session.query(Job).filter(Job.id == job_id, Job.company_id == company_id).update({"skills":nuevo})
+			session.commit()
+		else:
+			job.skills = [skill]
+			session.commit()
+
+		#Crear los matchscores y ponerlos en la base de datos
+		check = session.query(MatchScore).filter(MatchScore.job_id == job_id).first()
+		if check is None:
+			all_applicants = session.query(Applicant).all()
+			job = session.query(Job).filter(Job.id == job_id).one()
+			for applicant in all_applicants:
+				applicant_id = applicant.id
+				createMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
+		else:
+			scores = session.query(MatchScore).filter(MatchScore.job_id == job_id)
+			for score in scores:
+				applicant_id = score.applicant_id
+				updateMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
+	except Exception as e:
+		print(e)
+		print("El error ocurrió en la función addMathJob the dbOperations.py")
 
 
 def validateApplicant(mail, password):
@@ -294,11 +338,6 @@ def createApplicant(name, mail, password):
 	try:
 		appli = Applicant(name = name, mail = mail, password=password)
 		session.add(appli)
-		all_jobs = session.query(Job).all()
-		applicant_id = session.query(Applicant).filter(Applicant.mail == mail).one().id
-		for job in all_jobs:
-			job_id = job.id
-			createMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
 		session.commit()
 	except Exception as e:
 		print(e)
@@ -320,18 +359,13 @@ def createCompany(name, mail, password, description):
 			Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
 
 
-def createJob(title, salary, description, company_id, openings, status):
+def createJob(title, salary, description, company_id, openings, status, zipcode):
 	''' Function for creating a job. Everytime you create one, it creates a match score with every 
 		applicant available and adds it to the db'''
 	try:
-		trab = Job(title = title, salary = salary, description = description , company_id = company_id, openings=openings)
+		zipcode
+		trab = Job(title = title, salary = salary, description = description , company_id = company_id, openings=openings, status=status, zipcode=zipcode)
 		session.add(trab)
-		all_applicants = session.query(Applicant).all()
-		job = session.query(Job).filter(Job.title == title, Job.company_id == company_id).one()
-		job_id = job.id
-		for applicant in all_applicants:
-			applicant_id = applicant.id
-			createMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
 		session.commit()
 	except Exception as e:
 		print(e)
@@ -349,6 +383,19 @@ def createMatchScore(score, job_id, applicant_id):
 		print(e)
 		return render_template("main.html")
 		print("El error está en createMatchScore de dbOperations")
+		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo.\
+			Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
+
+
+def updateMatchScore(score, job_id, applicant_id):
+	try:
+		scored = session.query(MatchScore).filter(MatchScore.job_id == job_id, MatchScore.applicant_id == applicant_id).one()
+		scored.scores = score
+		session.commit()
+	except Exception as e:
+		print(e)
+		return render_template("main.html")
+		print("El error está en updateMatchScore de dbOperations")
 		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo.\
 			Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
 
@@ -506,3 +553,4 @@ job: 8 - applicant: 6 - Score: 48
 '''
 
 #printDB()
+

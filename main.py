@@ -155,9 +155,11 @@ def newJob(company_id):
             salary = request.form['salary']
             activa = request.form['radiosactiva']
             status = False
+            zipcode = request.form['zipcode']
             if activa == 'activa':
                 status = True
-            dbOperations.createJob(title, salary, description, company_id, openings, status)
+            dbOperations.createJob(title, salary, description, company_id, openings, status, zipcode)
+            print('Estoy atorado aqui')
             job_id = session.query(Job).filter(Job.company_id == company_id, Job.title == title).one().id
             return redirect(url_for('demoTestJob', company_id = company_id, job_id = job_id))
         else:
@@ -179,7 +181,6 @@ def demoTestJob(company_id, job_id):
             civil = request.form['civil']
             dependientes = request.form['dependientes']
             estudios = request.form['estudios']
-            print(request.form)
             dbOperations.addDemoJob(birthdate, zipcode, gender, civil, dependientes, estudios, company_id, job_id)
             return redirect(url_for('personalityTestJob', company_id = company_id, job_id = job_id))
         return render_template("demoJob.html", company_id = company_id, job_id = job_id)

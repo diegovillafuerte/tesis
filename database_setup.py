@@ -66,7 +66,7 @@ class Job(Base):
 	demografico = Column(ARRAY(Integer))
 	personalidad = Column(ARRAY(Integer))
 	skills = Column(ARRAY(Integer))
-
+	zipcode = Column(String(6))
 
 	company_id = Column(Integer, ForeignKey('company.id'))
 	company = relationship(Company)
