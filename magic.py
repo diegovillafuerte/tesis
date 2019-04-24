@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine, func
@@ -9,11 +10,11 @@ import locale
 #Importar formateo de dinero
 locale.setlocale( locale.LC_ALL, 'en_CA.UTF-8' )
 
-#engine = create_engine('postgres://localhost/simil') funciona local
-engine = create_engine(os.environ['DATABASE_URL'])
-Base.metadata.bind = engine
+# engine = create_engine('postgres://localhost/simil')
+db = create_engine('postgres://localhost/simil')
+Base.metadata.bind = db
 
-DBSession = sessionmaker(bind=engine)
+DBSession = sessionmaker(bind=db)
 session = DBSession()
 
 def getListOfMatchesForJob(job_id):
@@ -59,5 +60,14 @@ def getMatch(job_id, applicant_id):
 		return render_template("main.html")
 
 def matchScore(job_id, applicant_id):
+	applicant = session.query(Applicant).filter(Applicant.id == applicant_id).one()
+	job = session.query(Job).filter(Job.id == job_id).one()
+	jobskill = 0
+	for i in job.skills:
+		jobskill = jobskill + i[0]
+	jobskill = jobskill / job.skills
+	skillDistance = math.sqrt(pow(jobskill-applicant.skills[0],2))
 	score = random.random()*100
-	return score
+	return scores
+
+

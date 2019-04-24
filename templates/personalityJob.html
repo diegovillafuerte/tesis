@@ -1,0 +1,489 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+    <div class="container">
+      <h1>Sección 2 de 3: Test de personalidad</h1>
+      <p>Selecciona la opción que mejor represente tu personalidad</p>
+      <br>
+
+
+    <form method="POST">
+	  <div class="form-group">
+	    <h4>Soy el alma de la fiesta</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p1" id="option1" autocomplete="off" value="1" required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p1" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p1" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p1" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p1" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+
+	  <div class="form-group">
+	    <h4>Simpatizo con los sentimientos de los demás</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p2" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p2" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p2" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p2" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p2" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>Cuando empiezo a hacer algo, no me detengo hasta terminarlo</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p3" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p3" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p3" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p3" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p3" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>Frecuentemente tengo cambios repentinos de humor</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p4" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p4" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p4" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p4" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p4" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>Tengo una imaginación muy potente</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p5" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p5" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p5" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p5" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p5" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>No hablo mucho</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p6" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p6" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p6" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p6" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p6" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>No me intereso en los problemas de los demás</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p7" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p7" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p7" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p7" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p7" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>Con frecuencia olvido poner las cosas de regreso en su lugar</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p8" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p8" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p8" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p8" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p8" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>Estoy relajado la mayor parte del tiempo</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p9" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p9" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p9" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p9" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p9" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>No estoy interesado en ideas abstractas</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p10" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p10" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p10" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p10" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p10" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>Cuando voy a una fiesta, tiendo a hablar con muchas personas distintas</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p11" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p11" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p11" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p11" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p11" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>Percibo o siento las emociones de los demás</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p12" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p12" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p12" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p12" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p12" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>Me gusta el orden</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p13" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p13" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p13" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p13" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p13" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>Me enojo o altero facilmente</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p14" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p14" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p14" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p14" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p14" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>Tengo dificultad comprendiendo ideas abstractas</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p15" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p15" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p15" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p15" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p15" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>Tiendo a mantenerme al margen de las cosas</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p16" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p16" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p16" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p16" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p16" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>No tengo mucho interés en otras personas</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p17" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p17" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p17" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p17" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p17" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>Tiendo a convertir cualquier situación en un desastre</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p18" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p18" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p18" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p18" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p18" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>Muy rara vez me siento triste</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p19" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p19" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p19" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p19" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p19" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+	  <div class="form-group">
+	    <h4>No tengo mucha imaginación</h4>
+	    <br>
+	    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p20" id="option1" autocomplete="off" value="1"  required> Totalmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p20" id="option2" autocomplete="off" value="2"> Parcialmente falso
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p20" id="option3" autocomplete="off" value="3"> Ni falso ni cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p20" id="option3" autocomplete="off" value="4"> Parcialmente cierto
+		  </label>
+		  <label class="btn btn-outline-secondary">
+		    <input type="radio" name="p20" id="option3" autocomplete="off" value="5"> Totalmente cierto
+		</div>
+	  </div>
+	  <br>
+	  <br>
+
+
+	  <div>
+	  	<a href="{{url_for('personalityTestJob', company_id = company_id, job_id = job_id)}}">
+       		<button class="btn btn-primary " name="submit" type="submit">Enviar</button>
+       	</a>
+	  </div>
+	  <br>
+	  <br>
+	  <br>
+	  <br>
+	</form>
+
+    </div>
+
+
+{% endblock %}

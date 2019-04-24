@@ -1,0 +1,161 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+    <div class="container">
+      <h1>Sección 1 de 3: Información personal</h1>
+      <p>Te pedimos que respondas las siguientes preguntas lo más correctamente posible para poderte recomendar las mejores vacantes</p>
+
+		<div class="bootstrap-iso">
+		 <div class="container-fluid">
+		  <div class="row">
+		   <div class="col-md-6 col-sm-6 col-xs-12">
+		    <form method="post">
+		     <div class="form-group ">
+		      <label class="control-label requiredField" for="date">
+		       Fecha de nacimiento
+		       <span class="asteriskField">
+		        *
+		       </span>
+		      </label>
+		      <input class="form-control" id="date" name="date" placeholder="DD/MM/YYYY" type="text"/>
+		     </div>
+		     <div class="form-group ">
+		      <label class="control-label requiredField" for="zipCode">
+		       C&oacute;digo postal
+		       <span class="asteriskField">
+		        *
+		       </span>
+		      </label>
+		      <input class="form-control" id="zipCode" name="zipCode" placeholder="00000" type="text"/>
+		     </div>
+		     <div class="form-group ">
+		      <label class="control-label requiredField">
+		       Genero
+		       <span class="asteriskField">
+		        *
+		       </span>
+		      </label>
+		      <div class="">
+		       <div class="radio">
+		        <label class="radio">
+		         <input name="gender" type="radio" value="0"/>
+		         Femenino
+		        </label>
+		       </div>
+		       <div class="radio">
+		        <label class="radio">
+		         <input name="gender" type="radio" value="1"/>
+		         Masculino
+		        </label>
+		       </div>
+		       <div class="radio">
+		        <label class="radio">
+		         <input name="gender" type="radio" value="2"/>
+		         Otro
+		        </label>
+		       </div>
+		       <div class="radio">
+		        <label class="radio">
+		         <input name="gender" type="radio" value="3"/>
+		         Prefiero no contestar
+		        </label>
+		       </div>
+		      </div>
+		     </div>
+		     <div class="form-group ">
+		      <label class="control-label requiredField">
+		       Estado civil
+		       <span class="asteriskField">
+		        *
+		       </span>
+		      </label>
+		      <div class="">
+		       <div class="radio">
+		        <label class="radio">
+		         <input name="civil" type="radio" value="0"/>
+		         Casado
+		        </label>
+		       </div>
+		       <div class="radio">
+		        <label class="radio">
+		         <input name="civil" type="radio" value="1"/>
+		         Soltero
+		        </label>
+		       </div>
+		      </div>
+		     </div>
+		     <div class="form-group ">
+		      <label class="control-label requiredField" for="dependientes">
+		       Ingresa el n&uacute;mero de personas que dependen econ&oacute;micamente de ti
+		       <span class="asteriskField">
+		        *
+		       </span>
+		      </label>
+		      <input class="form-control" id="dependientes" name="dependientes" type="text"/>
+		     </div>
+		     <div class="form-group ">
+		      <label class="control-label requiredField">
+		       Selecciona tu grado m&aacute;ximo de estudios
+		       <span class="asteriskField">
+		        *
+		       </span>
+		      </label>
+		      <div class="">
+		       <div class="radio">
+		        <label class="radio">
+		         <input name="estudios" type="radio" value="0"/>
+		         Primaria o menor
+		        </label>
+		       </div>
+		       <div class="radio">
+		        <label class="radio">
+		         <input name="estudios" type="radio" value="1"/>
+		         Secundaria
+		        </label>
+		       </div>
+		       <div class="radio">
+		        <label class="radio">
+		         <input name="estudios" type="radio" value="2"/>
+		         Preparatoria trunca
+		        </label>
+		       </div>
+		       <div class="radio">
+		        <label class="radio">
+		         <input name="estudios" type="radio" value="3"/>
+		         Preparatoria terminada
+		        </label>
+		       </div>
+		       <div class="radio">
+		        <label class="radio">
+		         <input name="estudios" type="radio" value="4"/>
+		         Universidad
+		        </label>
+		       </div>
+		       <div class="radio">
+		        <label class="radio">
+		         <input name="estudios" type="radio" value="5"/>
+		         Posgrado
+		        </label>
+		       </div>
+		      </div>
+		     </div>
+		     <div class="form-group">
+		      <div>
+		      	<a href="{{url_for('demoTestApplicant', applicant_id=applicant_id)}}">
+		       		<button class="btn btn-primary " name="submit" type="submit">Submit</button>
+		       	</a>
+		      </div>
+		     </div>
+		    </form>
+		   </div>
+		  </div>
+		 </div>
+		</div>
+		</div>
+
+    </div>
+
+
+{% endblock %}

@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
@@ -5,14 +6,15 @@ from database_setup import Base, Company, Applicant, Job, MatchScore
 from sqlalchemy.orm import sessionmaker
 import dbOperations, magic
 
-#engine = create_engine('postgres://localhost/simil') Está es la versión que funciona localmente
-engine = create_engine(os.environ['DATABASE_URL'])
-Base.metadata.bind = engine
-
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
-
 app = Flask(__name__)
+#app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = create_engine('postgres://localhost/simil')
+Base.metadata.bind = db
+
+DBSession = sessionmaker(bind=db)
+session = DBSession()
 
 @app.route('/', methods=['GET', 'POST'])
 def showMain():
@@ -64,22 +66,61 @@ def newApplicant(app_mail="", app_password=""):
             name = request.form['name']
             dbOperations.createApplicant(name, mail, password)
             applicantID = session.query(Applicant).filter(Applicant.mail == mail).one().id
-            return redirect(url_for('startTestApplicant', applicant_id = applicantID))
+            return redirect(url_for('demoTestApplicant', applicant_id = applicantID))
         return render_template('signUpApplicant.html', mail = app_mail, password = app_password)
     except Exception as e:
         print(e)
-        print("El error ocurrión en la función newApplicant de main.py")
+        print("El error ocurrió en la función newApplicant de main.py")
         flash("Ocurrió un error, por favor intentalo de nuevo")
         return render_template("main.html")
 
 
-@app.route('/applicant/new/test/<int:applicant_id>', methods=['GET', 'POST'])
-def startTestApplicant(applicant_id):
+@app.route('/applicant/new/demotest/<int:applicant_id>', methods=['GET', 'POST'])
+def demoTestApplicant(applicant_id):
     try:
-        return render_template("typeFormDemoApplicants.html", applicant_id = applicant_id)
+        if request.method  == 'POST':
+            birthdate = request.form['date']
+            zipcode = request.form['zipCode']
+            gender = request.form['gender']
+            civil = request.form['civil']
+            dependientes = request.form['dependientes']
+            estudios = request.form['estudios']
+            dbOperations.addDemo(birthdate, zipcode, gender, civil, dependientes, estudios, applicant_id)
+            return redirect(url_for('personalityTestApplicant', applicant_id = applicant_id))
+        return render_template("demoApplicants.html", applicant_id = applicant_id)
     except Exception as e:
         print(e)
-        print("El error ocurrión en la función startTestApplicant de main.py")
+        print("El error ocurrió en la función demoTestApplicant de main.py")
+        flash("Ocurrió un error, por favor intentalo de nuevo")
+        return render_template("main.html")
+
+
+@app.route('/applicant/new/perstest/<int:applicant_id>', methods=['GET', 'POST'])
+def personalityTestApplicant(applicant_id):
+    try:
+        if request.method  == 'POST':
+            aux = request.form.to_dict()
+            dbOperations.addPersonality(aux, applicant_id)
+            return redirect(url_for('mathTestApplicant', applicant_id = applicant_id))
+        return render_template("personalityApplicants.html", applicant_id = applicant_id)
+    except Exception as e:
+        print(e)
+        print("El error ocurrió en la función personalityTestApplicant de main.py")
+        flash("Ocurrió un error, por favor intentalo de nuevo")
+        return render_template("main.html")
+
+
+@app.route('/applicant/new/mathtest/<int:applicant_id>', methods=['GET', 'POST'])
+def mathTestApplicant(applicant_id):
+    try:
+        if request.method  == 'POST':
+            aux = request.form.to_dict()
+            dbOperations.addMath(aux, applicant_id)
+            return redirect(url_for('showApplicant', applicant_id = applicant_id))
+        return render_template("mathApplicants.html", applicant_id = applicant_id)
+    except Exception as e:
+        print(e)
+        print("El error ocurrió en la función mathTestApplicant de main.py")
         flash("Ocurrió un error, por favor intentalo de nuevo")
         return render_template("main.html")
 
@@ -108,7 +149,6 @@ def newCompany(mail="", password=""):
 def newJob(company_id):
     try:
         if request.method  == 'POST':
-            print("Aquí si llego")
             title = request.form['title']
             description = request.form['description']
             openings = request.form['openings']
@@ -118,8 +158,8 @@ def newJob(company_id):
             if activa == 'activa':
                 status = True
             dbOperations.createJob(title, salary, description, company_id, openings, status)
-            companyID = session.query(Job).filter(Job.company_id == company_id, Job.title == title).one().company_id
-            return redirect(url_for('startTestJob', company_id = companyID))
+            job_id = session.query(Job).filter(Job.company_id == company_id, Job.title == title).one().id
+            return redirect(url_for('demoTestJob', company_id = company_id, job_id = job_id))
         else:
             return render_template('createJob.html', company_id = company_id)
     except Exception as e:
@@ -128,15 +168,57 @@ def newJob(company_id):
         flash("Ocurrió un error, por favor intentalo de nuevo")
         return render_template("main.html")
 
-@app.route('/job/new/test/<int:company_id>', methods=['GET', 'POST'])
-def startTestJob(company_id):
+
+@app.route('/job/new/demotest/<int:company_id>/<int:job_id>', methods=['GET', 'POST'])
+def demoTestJob(company_id, job_id):
     try:
-        return render_template("typeFormDemoJob.html", company_id = company_id)
+        if request.method  == 'POST':
+            birthdate = request.form['date']
+            zipcode = request.form['zipCode']
+            gender = request.form['gender']
+            civil = request.form['civil']
+            dependientes = request.form['dependientes']
+            estudios = request.form['estudios']
+            print(request.form)
+            dbOperations.addDemoJob(birthdate, zipcode, gender, civil, dependientes, estudios, company_id, job_id)
+            return redirect(url_for('personalityTestJob', company_id = company_id, job_id = job_id))
+        return render_template("demoJob.html", company_id = company_id, job_id = job_id)
     except Exception as e:
         print(e)
-        print("El error ocurrión en la función startTestJob de main.py")
+        print("El error ocurrió en la función demoTestJob de main.py")
         flash("Ocurrió un error, por favor intentalo de nuevo")
         return render_template("main.html")
+
+
+@app.route('/job/new/perstest/<int:company_id>/<int:job_id>', methods=['GET', 'POST'])
+def personalityTestJob(company_id, job_id):
+    try:
+        if request.method  == 'POST':
+            aux = request.form.to_dict()
+            dbOperations.addPersonalityJob(aux, company_id, job_id)
+            return redirect(url_for('mathTestJob', company_id = company_id, job_id = job_id))
+        return render_template("personalityJob.html", company_id = company_id, job_id = job_id)
+    except Exception as e:
+        print(e)
+        print("El error ocurrió en la función personalityTestJob de main.py")
+        flash("Ocurrió un error, por favor intentalo de nuevo")
+        return render_template("main.html")
+
+
+@app.route('/job/new/mathtest/<int:company_id>/<int:job_id>', methods=['GET', 'POST'])
+def mathTestJob(company_id, job_id):
+    try:
+        if request.method  == 'POST':
+            aux = request.form.to_dict()
+            dbOperations.addMathJob(aux, company_id, job_id)
+            return redirect(url_for('showCompany', company_id = company_id))
+        return render_template("mathJob.html", company_id = company_id, job_id = job_id)
+    except Exception as e:
+        print(e)
+        print("El error ocurrió en la función mathTestJob de main.py")
+        flash("Ocurrió un error, por favor intentalo de nuevo")
+        return render_template("main.html")
+
 
 @app.route('/company/<int:company_id>/feed')
 def showCompany(company_id):
@@ -276,6 +358,6 @@ def showMyApplicants(company_id):
 
 
 if __name__ == '__main__':
-        #app.secret_key = 'Super secret key'
-        app.debug = True
-        app.run()#(host='0.0.0.0', port=5000)
+    app.secret_key = "Está es mi llave super secreta"
+    app.debug = True
+    app.run()#(host='0.0.0.0', port=5000)

@@ -1,12 +1,13 @@
+import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String, Float, create_engine, Boolean
+from sqlalchemy import Column, ForeignKey, Integer, String, Float, create_engine, Boolean, ARRAY
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 import psycopg2
 
-#db_string = 'postgres://localhost/simil' Funciona local
-db_string = os.environ['DATABASE_URL']
-db = create_engine(db_string)
+
+db = create_engine('postgres://localhost/simil')
+#db = create_engine('jdbc:postgres://simil1.cyw8ohrkqbea.us-west-2.rds.amazonaws.com:5432/postgres')
 Base = declarative_base()
 
 class Company(Base):
@@ -36,6 +37,9 @@ class Applicant(Base):
 	name = Column(String(150), nullable = False)
 	mail = Column(String(150), nullable = False, unique=True)
 	password = Column(String(150), nullable = False)
+	demografico = Column(ARRAY(Integer))
+	personalidad = Column(ARRAY(Integer))
+	skills = Column(ARRAY(Integer))
 
 	@property
 	def serialize(self):
@@ -44,6 +48,9 @@ class Applicant(Base):
 		'id':self.id,
 		'name':self.name,
 		'mail':self.mail,
+		'demográfico':self.demografico,
+		'personalidad':self.personalidad,
+		'skills':self.skills
 		}
 
 class Job(Base):
@@ -56,6 +63,10 @@ class Job(Base):
 	description = Column(String(400), nullable = False)
 	openings = Column(Integer)
 	status = Column(Boolean, default=True)
+	demografico = Column(ARRAY(Integer))
+	personalidad = Column(ARRAY(Integer))
+	skills = Column(ARRAY(Integer))
+
 
 	company_id = Column(Integer, ForeignKey('company.id'))
 	company = relationship(Company)
