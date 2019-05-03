@@ -15,13 +15,11 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-#Setup the api key for the api call
-API_key = 'AIzaSyD7dxFiUZuFca-dU-uLgVqL4oJ9q7P14fY'
-gmaps = googlemaps.Client(key=API_key)
-
 psql \
    --host=simil1.cyw8ohrkqbea.us-west-2.rds.amazonaws.com \
    --port=5432 \
    --username=diegoMaster \
    --password \
    --dbname=simil1 
+
+   ps = instanciaSimil123
