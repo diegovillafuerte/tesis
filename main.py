@@ -221,6 +221,7 @@ def mathTestJob(company_id, job_id):
         if request.method  == 'POST':
             aux = request.form.to_dict()
             dbOperations.addMathJob(aux, company_id, job_id)
+            magic.generaModeloNevo(job_id)
             return redirect(url_for('showCompany', company_id = company_id))
         return render_template("mathJob.html", company_id = company_id, job_id = job_id)
     except Exception as e:
@@ -242,6 +243,7 @@ def showCompany(company_id):
         flash("Ocurrió un error, por favor vuelve a intentarlo")
         return render_template("main.html")
 
+
 @app.route('/applicant/<int:applicant_id>/feed')
 def showApplicant(applicant_id):
     try:
@@ -252,6 +254,7 @@ def showApplicant(applicant_id):
         print(e)
         flash("Ocurrió un error, por favor intentalo de nuevo")
         return render_template("main.html")   
+
 
 @app.route('/job/<int:job_id>/feed')
 def showJob(job_id):
@@ -270,25 +273,31 @@ def showJob(job_id):
 def editApplicant(applicant_id):
     return "This should show the option to edit an applicant's information"
 
+
 @app.route('/applicant/<int:applicant_id>/delete')
 def deleteApplicant(applicant_id):
     return "This should show the option to delete an applicant's information"
+
 
 @app.route('/company/<int:company_id>/edit')
 def editCompany(company_id):
     return "This should show the option to edit a company's information"
 
+
 @app.route('/company/<int:company_id>/delete')
 def deleteCompany(company_id):
     return "This should show the option to delete a company's information"
+
 
 @app.route('/job/<int:job_id>/edit')
 def editJob(job_id):
     return "This should show the option to edit a job's information"
 
+
 @app.route('/job/<int:job_id>/delete')
 def deleteJob(job_id):
     return "This should show the option to delete a job's information"
+
 
 @app.route('/job/<int:job_id>/<int:applicant_id>/interest')
 def showInterestCompany(job_id, applicant_id):
@@ -311,6 +320,7 @@ def showInterestCompany(job_id, applicant_id):
         flash("Ocurrió un error, por favor intentalo de nuevo")
         return render_template("main.html")
 
+
 @app.route('/applicant/<int:job_id>/<int:applicant_id>/interest')
 def showInterestApplicant(job_id, applicant_id):
     try:
@@ -325,13 +335,16 @@ def showInterestApplicant(job_id, applicant_id):
         flash("Ocurrió un error, por favor intentalo de nuevo")
         return render_template("main.html")
 
+
 @app.route('/contact') 
 def showContact():
     return render_template('contact.html')
 
+
 @app.route('/about') 
 def showAbout():
     return render_template('about.html')
+
 
 @app.route('/company/<int:company_id>/myApplicants') 
 def showMyApplicants(company_id):
@@ -362,9 +375,6 @@ def showMyApplicants(company_id):
         print("El error ocurrión en la función showMyApplicants de main.py")
         flash("Ocurrió un error, por favor intentalo de nuevo")
         return render_template("main.html")
-
-
-
 
 
 if __name__ == '__main__':
