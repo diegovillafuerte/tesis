@@ -20,8 +20,8 @@ DBSession = sessionmaker(bind=db)
 session = DBSession()
 
 #Setup the api key for the api call
-API_key = ''
-gmaps = googlemaps.Client(key=API_key)
+apiKey = os.environ['GOOGLE_API_KEY']
+gmaps = googlemaps.Client(key=apiKey)
 
 def getListOfMatchesForJob(job_id):
 	try:
@@ -155,5 +155,4 @@ def matchScore(job_id, applicant_id):
 	matchScore = ((sum([a*b for a,b in zip(totDistance,weightVector)])*100)/2)+50
 	return matchScore
 
-def recalculateAllScores():
-	return 0
+

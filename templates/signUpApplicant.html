@@ -20,24 +20,27 @@
         {% endwith %}
 
 
-      <form action="{{ url_for('newApplicant')}}" method = 'POST'>
+      <form action="{{ url_for('newApplicant')}}" method = 'POST' enctype = "multipart/form-data">
         <div class="form-group">
-          <label for="exampleInputName">Nombre</label>
-          <input name="name" type="text" class="form-control" id="exampleInputName" required>
+          <label for="name">Nombre</label>
+          <input name="name" type="text" class="form-control" id="name" required>
         </div>
         <div class="form-group">
-          <label for="exampleInputEmail1">Correo electrónico</label>
-          <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{mail}}" placeholder={{mail}} required>
+          <label for="email">Correo electrónico</label>
+          <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" value="{{mail}}" placeholder={{mail}} required>
           <small id="emailHelp" class="form-text text-muted">Nunca compartiremos tu correo electrónico con nadie.</small>
         </div>
         <div class="form-group">
-          <label for="exampleInputPassword1">Password</label>
-          <input name="password" type="password" class="form-control" id="exampleInputPassword1" required>
+          <label for="ingresaPassword">Password</label>
+          <input name="password" type="password" class="form-control" id="ingresaPassword" required>
         </div>
         <div class="form-group">
-          <label for="exampleInputPassword1">Confirma tu password</label>
-          <input name="password" type="password" class="form-control" id="exampleInputPassword1" required="">
+          <label for="confirmaPassword">Confirma tu password</label>
+          <input name="password" type="password" class="form-control" id="confirmaPassword" required>
         </div>
+        <div class="form-group">
+          <label for="subeCV">Sube tu Curriculum</label>
+          <input type = "file" name = "file" id="subeCV" required>
         <br><br>
         <button name="signup" value="signup" type="submit" class="btn btn-primary">Continuar a la primera sección del cuestionario</button>
       </form>

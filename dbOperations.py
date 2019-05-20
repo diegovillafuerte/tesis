@@ -9,8 +9,6 @@ import magic
 import math
 
 
-# engine = create_engine('postgres://localhost/simil')
-# db = create_engine(os.environ['DATABASE_URL'])
 db = create_engine('postgres://localhost/simil')
 Base.metadata.bind = db
 
@@ -207,7 +205,7 @@ def addMath(response, applicant_id):
 	try:
 		grade = 0
 		questions = ['p1','p2','p3','p4','p5','p6','p7','p8','p9','p10']
-		answers = ['3', '2', '3', '4', '5', '5', '5', '4', '4', '4']
+		answers = ['3', '2', '3', '4', '5', '5', '4', '4', '4', '4']
 		for i in range(len(questions)):
 			if response[questions[i]] == answers[i]:
 				grade = grade + 1
@@ -229,7 +227,7 @@ def addMathJob(response, company_id, job_id):
 	try:
 		grade = 0
 		questions = ['p1','p2','p3','p4','p5','p6','p7','p8','p9','p10']
-		answers = ['3', '2', '3', '4', '5', '5', '5', '4', '4', '4']
+		answers = ['3', '2', '3', '4', '5', '5', '4', '4', '4', '4']
 		for i in range(len(questions)):
 			if response[questions[i]] == answers[i]:
 				grade = grade + 1

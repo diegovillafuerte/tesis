@@ -7,7 +7,6 @@ import psycopg2
 
 
 db = create_engine('postgres://localhost/simil')
-#db = create_engine('jdbc:postgres://simil1.cyw8ohrkqbea.us-west-2.rds.amazonaws.com:5432/postgres')
 Base = declarative_base()
 
 class Company(Base):
@@ -40,6 +39,7 @@ class Applicant(Base):
 	demografico = Column(ARRAY(Integer))
 	personalidad = Column(ARRAY(Integer))
 	skills = Column(ARRAY(Integer))
+	outcome = Column(Boolean, default = False)
 
 	@property
 	def serialize(self):
@@ -67,6 +67,8 @@ class Job(Base):
 	personalidad = Column(ARRAY(Integer))
 	skills = Column(ARRAY(Integer))
 	zipcode = Column(String(6))
+	coeficientes = Column(ARRAY(Float))
+	intercept = Column(Float)
 
 	company_id = Column(Integer, ForeignKey('company.id'))
 	company = relationship(Company)

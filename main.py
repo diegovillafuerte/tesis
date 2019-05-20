@@ -5,10 +5,13 @@ from sqlalchemy import create_engine
 from database_setup import Base, Company, Applicant, Job, MatchScore
 from sqlalchemy.orm import sessionmaker
 import dbOperations, magic
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 #app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#UPLOAD_FOLDER = './static/cv'
+#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db = create_engine('postgres://localhost/simil')
 Base.metadata.bind = db
@@ -47,18 +50,18 @@ def showMain():
                 if dbOperations.validateMail(mail):
                     flash("Ya existe un aplicante registrado con ese correo")
                 else:
-                    return redirect(url_for('newApplicant', app_mail=mail, app_password=password))
+                    return redirect(url_for('newApplicant', app_mail=mail))
             else:
                 if dbOperations.validateMail(mail):
                     flash("Ya existe una compañía registrado con ese correo")
                 else:
-                    return redirect(url_for('newCompany', mail = mail, password = password))
+                    return redirect(url_for('newCompany', mail = mail))
     return render_template("main.html")
 
 
 @app.route('/applicant/new', methods=['GET', 'POST'])
-@app.route('/applicant/new/<string:app_mail>/<string:app_password>', methods=['GET', 'POST'])
-def newApplicant(app_mail="", app_password=""):
+@app.route('/applicant/new/<string:app_mail>', methods=['GET', 'POST'])
+def newApplicant(app_mail=""):
     try:
         if request.method  == 'POST':
             mail = request.form['email']
@@ -66,8 +69,14 @@ def newApplicant(app_mail="", app_password=""):
             name = request.form['name']
             dbOperations.createApplicant(name, mail, password)
             applicantID = session.query(Applicant).filter(Applicant.mail == mail).one().id
+            cv = request.files['file']
+
+            #Guarda su CV en el folder static/cv con el nombre CV + el id del usuario
+            filename = "CV" + str(applicantID) + ".pdf"
+            cv.save(secure_filename(filename))
+
             return redirect(url_for('demoTestApplicant', applicant_id = applicantID))
-        return render_template('signUpApplicant.html', mail = app_mail, password = app_password)
+        return render_template('signUpApplicant.html', mail = app_mail)
     except Exception as e:
         print(e)
         print("El error ocurrió en la función newApplicant de main.py")
@@ -126,7 +135,7 @@ def mathTestApplicant(applicant_id):
 
 
 @app.route('/company/new', methods=['GET', 'POST'])
-@app.route('/company/new/<string:mail>/<string:password>', methods=['GET', 'POST'])
+@app.route('/company/new/<string:mail>', methods=['GET', 'POST'])
 def newCompany(mail="", password=""):
     try:
         if request.method  == 'POST':
@@ -137,7 +146,7 @@ def newCompany(mail="", password=""):
             dbOperations.createCompany(name, mail, password, description)
             companyID = session.query(Company).filter(Company.mail == mail).one().id
             return redirect(url_for('showCompany', company_id = companyID))
-        return render_template('signUpCompany.html', mail = mail, password = password)
+        return render_template('signUpCompany.html', mail = mail)
     except Exception as e:
         print(e)
         print("El error ocurrión en la función newCompany de main.py")
