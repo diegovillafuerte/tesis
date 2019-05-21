@@ -51,7 +51,4 @@ wrapt==1.11.1
 wurlitzer==1.0.2
 xbcfg==0.5
 xlrd==1.2.0
-XlsxWriter==1.1.5
-xlwings==0.15.3
-xlwt==1.2.0
-zict==0.1.3
+
