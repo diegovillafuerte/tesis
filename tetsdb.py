@@ -23,7 +23,6 @@ db_user = os.environ['db_user']
 db_pass = os.environ['db_pass']
 db_host = os.environ['db_host']
 db_port = os.environ['db_port']
-db_name = os.environ['db_name']
 
 engine = create_engine("postgresql+psycopg2://{}:{}@{}:{}/{}?sslmode=require".format(db_user, db_pass, db_host, db_port, 'postgres'))
 Base.metadata.bind = engine
