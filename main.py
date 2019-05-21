@@ -9,10 +9,11 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = os.environ['tesis_secret_key']
+
 #app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-#UPLOAD_FOLDER = './static/cv'
-#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+UPLOAD_FOLDER = '/static/cv'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db_user = os.environ['db_user']
 db_pass = os.environ['db_pass']
@@ -382,6 +383,5 @@ def showMyApplicants(company_id):
 
 
 if __name__ == '__main__':
-    app.secret_key = "Está es mi llave super secreta"
     app.debug = True
     app.run()#(host='0.0.0.0', port=5000)
