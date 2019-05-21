@@ -6,7 +6,16 @@ from sqlalchemy.orm import relationship, sessionmaker
 import psycopg2
 
 
-db = create_engine('postgres://localhost/simil')
+#db = create_engine('postgres://localhost/simil')
+db_user = os.environ['db_user']
+db_pass = os.environ['db_pass']
+db_host = os.environ['db_host']
+db_port = os.environ['db_port']
+db_name = os.environ['db_name']
+
+db = create_engine("postgresql+psycopg2://{}:{}@{}:{}/{}?sslmode=require".format(db_user, db_pass, db_host, db_port, 'postgres'))
+
+
 Base = declarative_base()
 
 class Company(Base):
