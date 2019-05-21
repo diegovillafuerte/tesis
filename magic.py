@@ -8,6 +8,14 @@ import random
 import locale
 import math
 import googlemaps
+import scipy.stats
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn import metrics
+import pandas as pd
+import numpy as np
+from numpy.random import seed, rand, randn
+import matplotlib.pyplot as plt
 
 #Importar formateo de dinero
 locale.setlocale( locale.LC_ALL, 'en_CA.UTF-8' )
@@ -307,6 +315,16 @@ def generaModeloNevo(job_id):
 	session.commit()
 
 
+def getMatch(job_id, applicant_id):
+	try:
+		score = session.query(MatchScore).filter(MatchScore.job_id==job_id, MatchScore.applicant_id==applicant_id).one()
+		return score
+	except Exception as e:
+		print(e)
+		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo. Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
+		return render_template("main.html")
+
+
 def getListOfMatchesForJob(job_id):
 	try:
 		applicants = session.query(Applicant).all()
@@ -320,7 +338,6 @@ def getListOfMatchesForJob(job_id):
 	except Exception as e:
 		print(e)
 		print("El error es en la función getListOfMatchesForJob de magic.py")
-		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo. Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
 		return render_template("main.html")
 
 
@@ -342,14 +359,7 @@ def getListOfMatchesForApplicant(applicant_id):
 		return render_template("main.html")
 
 
-def getMatch(job_id, applicant_id):
-	try:
-		score = session.query(MatchScore).filter(MatchScore.job_id==job_id, MatchScore.applicant_id==applicant_id).one()
-		return score
-	except Exception as e:
-		print(e)
-		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo. Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
-		return render_template("main.html")
+
 
 
 def matchScore(job_id, applicant_id):
@@ -369,6 +379,7 @@ def matchScore(job_id, applicant_id):
 	else:
 		matchScore = 0
 	return matchScore
+
 
 
 def regenerateAllMatchScores():

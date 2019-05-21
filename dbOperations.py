@@ -223,41 +223,43 @@ def addMath(response, applicant_id):
 		print("El error ocurrió en la función addMath the dbOperations.py")
 
 
-def addMathJob(response, company_id, job_id):
-	try:
-		grade = 0
-		questions = ['p1','p2','p3','p4','p5','p6','p7','p8','p9','p10']
-		answers = ['3', '2', '3', '4', '5', '5', '4', '4', '4', '4']
-		for i in range(len(questions)):
-			if response[questions[i]] == answers[i]:
-				grade = grade + 1
-		skill = [grade]
-		job = session.query(Job).filter(Job.id == job_id, Job.company_id == company_id).one()
-		nuevo = job.skills
-		if nuevo is not None:
-			nuevo.append(skill)
-			session.query(Job).filter(Job.id == job_id, Job.company_id == company_id).update({"skills":nuevo})
-			session.commit()
-		else:
-			job.skills = [skill]
-			session.commit()
+def addMathJob(response, job_id):
+	#try:
+	grade = 0
+	questions = ['p1','p2','p3','p4','p5','p6','p7','p8','p9','p10']
+	answers = ['3', '2', '3', '4', '5', '5', '4', '4', '4', '4']
+	for i in range(len(questions)):
+		if response[questions[i]] == answers[i]:
+			grade = grade + 1
+	skill = [grade]
+	job = session.query(Job).filter(Job.id == job_id).one()
+	nuevo = job.skills
+	if nuevo is not None:
+		nuevo.append(skill)
+		session.query(Job).filter(Job.id == job_id).update({"skills":nuevo})
+		session.commit()
+	else:
+		job.skills = [skill]
+		session.commit()
 
-		#Crear los matchscores y ponerlos en la base de datos
-		check = session.query(MatchScore).filter(MatchScore.job_id == job_id).first()
-		if check is None:
-			all_applicants = session.query(Applicant).all()
-			job = session.query(Job).filter(Job.id == job_id).one()
-			for applicant in all_applicants:
-				applicant_id = applicant.id
-				createMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
-		else:
-			scores = session.query(MatchScore).filter(MatchScore.job_id == job_id)
-			for score in scores:
-				applicant_id = score.applicant_id
-				updateMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
-	except Exception as e:
+	#Crear los matchscores y ponerlos en la base de datos
+	magic.generaModeloNevo(job_id)
+	check = session.query(MatchScore).filter(MatchScore.job_id == job_id).first()
+	if check is None:
+		all_applicants = session.query(Applicant).all()
+		job = session.query(Job).filter(Job.id == job_id).one()
+		for applicant in all_applicants:
+			applicant_id = applicant.id
+			createMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
+	else:
+		scores = session.query(MatchScore).filter(MatchScore.job_id == job_id)
+		for score in scores:
+			applicant_id = score.applicant_id
+			updateMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
+		print("todo chido, si se logró")
+	'''except Exception as e:
 		print(e)
-		print("El error ocurrió en la función addMathJob the dbOperations.py")
+		print("El error ocurrió en la función addMathJob the dbOperations.py")'''
 
 
 def validateApplicant(mail, password):

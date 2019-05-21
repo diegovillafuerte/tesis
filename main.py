@@ -168,7 +168,6 @@ def newJob(company_id):
             if activa == 'activa':
                 status = True
             dbOperations.createJob(title, salary, description, company_id, openings, status, zipcode)
-            print('Estoy atorado aqui')
             job_id = session.query(Job).filter(Job.company_id == company_id, Job.title == title).one().id
             return redirect(url_for('demoTestJob', company_id = company_id, job_id = job_id))
         else:
@@ -220,8 +219,7 @@ def mathTestJob(company_id, job_id):
     try:
         if request.method  == 'POST':
             aux = request.form.to_dict()
-            dbOperations.addMathJob(aux, company_id, job_id)
-            magic.generaModeloNevo(job_id)
+            dbOperations.addMathJob(aux, job_id)
             return redirect(url_for('showCompany', company_id = company_id))
         return render_template("mathJob.html", company_id = company_id, job_id = job_id)
     except Exception as e:
