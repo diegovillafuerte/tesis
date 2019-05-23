@@ -20,6 +20,18 @@ Base.metadata.bind = db
 DBSession = sessionmaker(bind=db)
 session = DBSession()
 
+def createMatchScore(score, job_id, applicant_id):
+	#try:
+	match = MatchScore(scores=score, job_id=job_id, applicant_id=applicant_id)
+	session.add(match)
+	session.commit()
+	'''except Exception as e:
+		print(e)
+		return render_template("main.html")
+		print("El error está en createMatchScore de dbOperations")
+		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo.\
+			Si el problema es persistente te pedimos que te pongas en contacto con nosotros")'''
+
 
 def addDemo(birthdate, zipcode, gender, civil, dependientes, estudios, applicant_id):
 	try:
@@ -248,20 +260,25 @@ def addMathJob(response, job_id):
 		session.commit()
 
 	#Crear los matchscores y ponerlos en la base de datos
-	magic.generaModeloNevo(job_id)
-	check = session.query(MatchScore).filter(MatchScore.job_id == job_id).first()
-	if check is None:
-		all_applicants = session.query(Applicant).all()
-		job = session.query(Job).filter(Job.id == job_id).one()
-		for applicant in all_applicants:
-			applicant_id = applicant.id
-			createMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
+	if(magic.generaModeloNevo(job_id)):
+		check = session.query(MatchScore).filter(MatchScore.job_id == job_id).first()
+		if check is None:
+			all_applicants = session.query(Applicant).all()
+			job = session.query(Job).filter(Job.id == job_id).one()
+			for applicant in all_applicants:
+				applicant_id = applicant.id
+				createMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
+		else:
+			scores = session.query(MatchScore).filter(MatchScore.job_id == job_id)
+			for score in scores:
+				applicant_id = score.applicant_id
+				updateMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
 	else:
-		scores = session.query(MatchScore).filter(MatchScore.job_id == job_id)
-		for score in scores:
-			applicant_id = score.applicant_id
-			updateMatchScore(magic.matchScore(job_id, applicant_id), job_id, applicant_id)
-		print("todo chido, si se logró")
+		jj = session.query(Job).filter(Job.id == job_id).delete()
+		session.commit()
+		flash("Lo lamentamos mucho, por el momento no contamos con la información suficiente para generar recomendaciones para trabajos en esa categoría.")
+
+
 	'''except Exception as e:
 		print(e)
 		print("El error ocurrió en la función addMathJob the dbOperations.py")'''
@@ -379,19 +396,6 @@ def createJob(title, salary, description, company_id, openings, status, zipcode)
 			Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
 
 
-def createMatchScore(score, job_id, applicant_id):
-	try:
-		match = MatchScore(scores=score, job_id=job_id, applicant_id=applicant_id)
-		session.add(match)
-		session.commit()
-	except Exception as e:
-		print(e)
-		return render_template("main.html")
-		print("El error está en createMatchScore de dbOperations")
-		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo.\
-			Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
-
-
 def updateMatchScore(score, job_id, applicant_id):
 	try:
 		scored = session.query(MatchScore).filter(MatchScore.job_id == job_id, MatchScore.applicant_id == applicant_id).one()
@@ -430,5 +434,4 @@ def printDB():
 		sal = "job: " + str(match.job_id) +" - " + "applicant: " + str(match.applicant_id)  +" - " + "Score: " + str(match.scores) + "\n"
 		print(sal)
 
-#printDB()
 

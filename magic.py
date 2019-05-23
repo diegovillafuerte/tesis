@@ -16,12 +16,18 @@ import pandas as pd
 import numpy as np
 from numpy.random import seed, rand, randn
 import matplotlib.pyplot as plt
+import dbOperations
+
 
 #Importar formateo de dinero
 locale.setlocale( locale.LC_ALL, 'en_CA.UTF-8' )
 
-# engine = create_engine('postgres://localhost/simil')
-db = create_engine('postgres://localhost/simil')
+db_user = os.environ['db_user']
+db_pass = os.environ['db_pass']
+db_host = os.environ['db_host']
+db_port = os.environ['db_port']
+
+db = create_engine("postgresql+psycopg2://{}:{}@{}:{}/{}?sslmode=require".format(db_user, db_pass, db_host, db_port, 'postgres'))
 Base.metadata.bind = db
 
 DBSession = sessionmaker(bind=db)
@@ -300,10 +306,13 @@ def generaModeloNevo(job_id):
 		modelo.intercept_ = np.array(trabajo.intercept)
 		modelo.classes_ = np.array([False, True])
 		prediction = modelo.predict([vectorCaracteristico])
+		probas = modelo.predict_proba([vectorCaracteristico])
 		if prediction[0] == True: 
 			probas = modelo.predict_proba([vectorCaracteristico])
 			fila = pd.DataFrame({'job' : [trabajo.id] , 'confidence' : [probas[0][1]], 'vector' : [trabajo.coeficientes], 'intercept' : [trabajo.intercept]})
 			similares = similares.append(fila, ignore_index = True)
+	if similares.empty:
+		return False
 	res = [0]*12
 	for index, row in similares.iterrows():
 		peso = row['confidence']/similares.confidence.sum()
@@ -315,11 +324,13 @@ def generaModeloNevo(job_id):
 		similares.set_value(index, 'weightedInt',weightedInt)
 		for i in range(len(res)):
 			res[i] = res[i] + similares['weighted'][index][i]
+	print(similares)
 	intercept = similares.weightedInt.sum()
 	job = session.query(Job).filter(Job.id == job_id).one()
 	job.coeficientes = res
 	job.intercept = intercept
 	session.commit()
+	return True
 
 
 def getMatch(job_id, applicant_id):
@@ -349,8 +360,9 @@ def getListOfMatchesForJob(job_id):
 
 
 def getListOfMatchesForApplicant(applicant_id):
+	print("hola, entre a la función")
 	try:
-		jobs = session.query(Job).filter(Job.status==True)
+		jobs = session.query(Job).filter(Job.status==True).all()
 		matches = []
 		for i in jobs:
 			match = getMatch(i.id, applicant_id)
@@ -364,9 +376,6 @@ def getListOfMatchesForApplicant(applicant_id):
 		print("El error es en la función getListOfMatchesForApplicant de magic.py")
 		flash("Lo sentimos, ocurrió un error en nuestro sistema, por favor vuelve a intentarlo. Si el problema es persistente te pedimos que te pongas en contacto con nosotros")
 		return render_template("main.html")
-
-
-
 
 
 def matchScore(job_id, applicant_id):
@@ -388,7 +397,6 @@ def matchScore(job_id, applicant_id):
 	return matchScore
 
 
-
 def regenerateAllMatchScores():
 	#Borrar todos los registros existentes de match
 	session.query(MatchScore).delete()
@@ -400,8 +408,9 @@ def regenerateAllMatchScores():
 	for job in trabajos:
 		for aplicante in aplicantes:
 			score = matchScore(job.id, aplicante.id)
-			dbOperations.createMatchScore(score, job.id, aplicante.id)
-
+			match = MatchScore(scores=score, job_id=job.id, applicant_id=aplicante.id)
+			session.add(match)
+			session.commit()
 
 
 #Esta es la versión vieja de matchScore que lo hace por distancias. Se deja pero no se usa 
